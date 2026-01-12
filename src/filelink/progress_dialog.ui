@@ -374,7 +374,7 @@ QPushButton:pressed
                   </property>
                   <property name="icon">
                    <iconset resource="../easylink.qrc">
-                    <normaloff>:/resources/icon/pause.ico</normaloff>:/resources/icon/pause.ico</iconset>
+                    <normaloff>:/icons/pause.ico</normaloff>:/icons/pause.ico</iconset>
                   </property>
                   <property name="autoDefault">
                    <bool>false</bool>
@@ -424,7 +424,7 @@ QPushButton:pressed
                   </property>
                   <property name="icon">
                    <iconset resource="../easylink.qrc">
-                    <normaloff>:/resources/icon/cancel.ico</normaloff>:/resources/icon/cancel.ico</iconset>
+                    <normaloff>:/icons/cancel.ico</normaloff>:/icons/cancel.ico</iconset>
                   </property>
                   <property name="autoDefault">
                    <bool>false</bool>
@@ -1049,7 +1049,7 @@ QPushButton:pressed
                </property>
                <property name="icon">
                 <iconset resource="../easylink.qrc">
-                 <normaloff>:/resources/icon/replace.ico</normaloff>:/resources/icon/replace.ico</iconset>
+                 <normaloff>:/icons/replace.ico</normaloff>:/icons/replace.ico</iconset>
                </property>
                <property name="shortcut">
                 <string>R</string>
@@ -1113,7 +1113,7 @@ QPushButton:pressed
                </property>
                <property name="icon">
                 <iconset resource="../easylink.qrc">
-                 <normaloff>:/resources/icon/skip.ico</normaloff>:/resources/icon/skip.ico</iconset>
+                 <normaloff>:/icons/skip.ico</normaloff>:/icons/skip.ico</iconset>
                </property>
                <property name="shortcut">
                 <string>S</string>
@@ -1177,7 +1177,7 @@ QPushButton:pressed
                </property>
                <property name="icon">
                 <iconset resource="../easylink.qrc">
-                 <normaloff>:/resources/icon/keep.ico</normaloff>:/resources/icon/keep.ico</iconset>
+                 <normaloff>:/icons/keep.ico</normaloff>:/icons/keep.ico</iconset>
                </property>
                <property name="shortcut">
                 <string>K</string>
@@ -1241,7 +1241,7 @@ QPushButton:pressed
                </property>
                <property name="icon">
                 <iconset resource="../easylink.qrc">
-                 <normaloff>:/resources/icon/decide.ico</normaloff>:/resources/icon/decide.ico</iconset>
+                 <normaloff>:/icons/decide.ico</normaloff>:/icons/decide.ico</iconset>
                </property>
                <property name="shortcut">
                 <string>D</string>
@@ -1478,8 +1478,8 @@ QPushButton:pressed
                   <string>Details</string>
                  </property>
                  <property name="icon">
-                  <iconset resource="easylink.qrc">
-                   <normaloff>:/resources/icon/details.png</normaloff>:/resources/icon/details.png</iconset>
+                  <iconset resource="filelink.qrc">
+                   <normaloff>:/icons/details.png</normaloff>:/icons/details.png</iconset>
                  </property>
                  <property name="autoDefault">
                   <bool>false</bool>
