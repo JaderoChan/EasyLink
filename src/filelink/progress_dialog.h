@@ -50,7 +50,7 @@ protected:
     void onDecideAllBtnPressed();
 
 private:
-    // 更改tasks中所有为None策略的条目为Skip策略。
+    // 更改tasks中所有None策略的条目为Skip策略。
     static void normalizeECS(LinkTasks& tasks);
 
     void updateStatsDisplay();
