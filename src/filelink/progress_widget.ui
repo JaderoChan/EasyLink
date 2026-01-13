@@ -241,10 +241,11 @@
 	background: transparent;
 	border: 2px solid rgb(128,128,128);
 	border-radius: 8px;
+	color: rgb(0,0,0);
 }
 
 QProgressBar::chunk {
-	background: rgb(120,170,210);
+	background: rgb(48,134,200);
 	border-radius: 6px;
 }</string>
                </property>

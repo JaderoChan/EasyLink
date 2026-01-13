@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>500</width>
+    <width>540</width>
     <height>500</height>
    </rect>
   </property>
@@ -19,17 +19,17 @@
    <string>ConflictDecisionDialog</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">
+   <property name="spacing">
+    <number>1</number>
+   </property>
    <property name="leftMargin">
-    <number>18</number>
+    <number>0</number>
    </property>
    <property name="topMargin">
     <number>9</number>
    </property>
    <property name="rightMargin">
-    <number>18</number>
-   </property>
-   <property name="bottomMargin">
-    <number>9</number>
+    <number>0</number>
    </property>
    <item>
     <widget class="QWidget" name="widget" native="true">
@@ -38,16 +38,10 @@
        <number>2</number>
       </property>
       <property name="leftMargin">
-       <number>0</number>
-      </property>
-      <property name="topMargin">
-       <number>0</number>
+       <number>24</number>
       </property>
       <property name="rightMargin">
-       <number>0</number>
-      </property>
-      <property name="bottomMargin">
-       <number>0</number>
+       <number>24</number>
       </property>
       <item>
        <widget class="QLabel" name="headerText1">
@@ -57,6 +51,9 @@
           <bold>true</bold>
           <stylestrategy>PreferAntialias</stylestrategy>
          </font>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">color: rgb(37,122,189);</string>
         </property>
         <property name="text">
          <string>Which files do you want to keep?</string>
@@ -71,6 +68,13 @@
        </widget>
       </item>
      </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="Line" name="line">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
     </widget>
    </item>
    <item>
@@ -149,16 +153,23 @@ QTableView::item:selected {
     </widget>
    </item>
    <item>
+    <widget class="Line" name="line_2">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+    </widget>
+   </item>
+   <item>
     <widget class="QWidget" name="widget_3" native="true">
      <layout class="QHBoxLayout" name="horizontalLayout">
       <property name="leftMargin">
-       <number>0</number>
+       <number>12</number>
       </property>
       <property name="topMargin">
-       <number>0</number>
+       <number>6</number>
       </property>
       <property name="rightMargin">
-       <number>0</number>
+       <number>12</number>
       </property>
       <property name="bottomMargin">
        <number>0</number>
