@@ -194,16 +194,12 @@ void FileLinkWorker::addTask(LinkType linkType, const QFileInfo& source, const Q
 {
     currentEntryPair_ = {
         {
-            source.absoluteFilePath(),
-            source.fileName(),
-            source.absolutePath(),
+            source,
             source.lastModified(),
             source.size()
         },
         {
-            target.absoluteFilePath(),
-            target.fileName(),
-            target.absolutePath(),
+            target,
             target.lastModified(),
             target.size()
         }
@@ -284,8 +280,8 @@ LinkTasks FileLinkWorker::processTasks()
         currentEntryPair_ = task.entryPair;
         try
         {
-            auto source = QFileInfo(task.entryPair.source.path);
-            auto target = QFileInfo(task.entryPair.target.path);
+            auto& source = task.entryPair.source.fileinfo;
+            auto& target = task.entryPair.target.fileinfo;
             bool isConflict = !createLink(task.linkType, source, target, task.ecs);
             if (isConflict)
             {

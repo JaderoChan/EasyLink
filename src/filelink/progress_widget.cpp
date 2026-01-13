@@ -273,14 +273,14 @@ void ProgressWidget::updateSpeedRemainingTimeDisplay()
 void ProgressWidget::updateCurrentEntryDisplay(const EntryPair& currentEntryPair)
 {
     const auto& source = currentEntryPair.source;
-    ui.currentEntryValue->setText(source.path);
-    ui.currentEntryValue->setToolTip(source.path);
+    ui.currentEntryValue->setText(source.fileinfo.absoluteFilePath());
+    ui.currentEntryValue->setToolTip(source.fileinfo.absoluteFilePath());
 
     ui.fileText->hide();
     ui.directoryText->hide();
     ui.symbolText->hide();
 
-    QFileInfo fileinfo(source.path);
+    const auto& fileinfo = source.fileinfo;
     if (fileinfo.isSymbolicLink() || fileinfo.isShortcut() || fileinfo.isBundle() || fileinfo.isJunction())
         ui.symbolText->show();
     else if (fileinfo.isFile())
