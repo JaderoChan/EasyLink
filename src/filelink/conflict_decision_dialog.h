@@ -2,6 +2,7 @@
 
 #include <qdialog.h>
 #include <qevent.h>
+#include <qsortfilterproxymodel.h>
 
 #include "ui_conflict_decision_dialog.h"
 #include "types.h"
@@ -21,5 +22,7 @@ protected:
 private:
     Ui::ConflictDecisionDialog ui;
     QAbstractTableModel* model_ = nullptr;
+    QSortFilterProxyModel* proxyModel_ = nullptr;
     int sameDateSizeEntries_ = 0;
+    bool isFiltered = false;
 };

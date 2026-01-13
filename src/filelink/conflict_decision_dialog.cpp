@@ -1,6 +1,6 @@
 #include "conflict_decision_dialog.h"
 
-#include <qsortfilterproxymodel.h>
+#include <qelapsedtimer.h>
 
 #include <easy_translate.hpp>
 
@@ -9,19 +9,23 @@
 #define CLSNAME "ConflictDecisionDialog"
 
 ConflictDecisionDialog::ConflictDecisionDialog(LinkTasks& conflicts, QWidget* parent)
-    : QDialog(parent), model_(new ConflictDecisionTableModel(conflicts, this))
+    : QDialog(parent),
+    model_(new ConflictDecisionTableModel(conflicts, this)),
+    proxyModel_(new QSortFilterProxyModel(this))
 {
     ui.setupUi(this);
 
-    ui.tableView->setModel(model_);
+    proxyModel_->setSourceModel(model_);
+    proxyModel_->setFilterRole(SAME_DATE_SIZE_ROLE);
+    proxyModel_->setFilterKeyColumn(0);
+    ui.tableView->setModel(proxyModel_);
     ui.tableView->verticalHeader()->setMinimumSectionSize(36);
     ui.tableView->verticalHeader()->setMaximumSectionSize(36);
     ui.tableView->verticalHeader()->setSectionsClickable(false);
     ui.tableView->horizontalHeader()->setSectionsClickable(false);
     ui.tableView->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 
-    for (int i = 0; i < model_->rowCount(); ++i)
-        sameDateSizeEntries_ += model_->index(i, 0).data(SAME_DATE_SIZE_ROLE).toBool() ? 1 : 0;
+    sameDateSizeEntries_ = model_->match(model_->index(0, 0), SAME_DATE_SIZE_ROLE, true, -1).size();
 
     connect(ui.okBtn, &QPushButton::clicked, this, &QDialog::accept);
     connect(ui.cancelBtn, &QPushButton::clicked, this, &QDialog::reject);
@@ -49,5 +53,9 @@ void ConflictDecisionDialog::changeEvent(QEvent* event)
 
 void ConflictDecisionDialog::onSkipSameDateSizeCbToggled()
 {
-    // todo
+    if (!isFiltered)
+        proxyModel_->setFilterFixedString("false");
+    else
+        proxyModel_->setFilterFixedString("");
+    isFiltered = !isFiltered;
 }
