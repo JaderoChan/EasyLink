@@ -20,5 +20,5 @@ protected:
 
 private:
     Ui::ConflictDecisionDialog ui;
-    int sameDateAndSizeEntries_ = 0;
+    int sameDateSizeEntries_ = 0;
 };
