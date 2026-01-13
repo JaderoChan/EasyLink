@@ -39,7 +39,8 @@ QVariant ConflictDecisionTableviewModel::data(const QModelIndex& index, int role
     {
         case Qt::DisplayRole:
             return fileinfo.fileName();
-        case Qt::ToolTipRole:
+        case Qt::ToolTipRole:   // Fallthrough
+        case FILENAME_ROLE:
             return fileinfo.absoluteFilePath();
         case Qt::CheckStateRole:
         {
@@ -57,6 +58,9 @@ QVariant ConflictDecisionTableviewModel::data(const QModelIndex& index, int role
             return getFileIcon(fileinfo);
         case URL_ROLE:
             return fileinfo.absolutePath();
+        case SAME_DATE_SIZE_ROLE:
+            return (conflict.entryPair.source.size() == conflict.entryPair.target.size()) &&
+                (conflict.entryPair.source.lastModified() == conflict.entryPair.target.lastModified());
         default:
             break;
     }

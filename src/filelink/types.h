@@ -3,8 +3,6 @@
 #include <qfileinfo.h>
 #include <qqueue.h>
 
-#define URL_ROLE (Qt::UserRole + 1)
-
 enum LinkType : char
 {
     LT_SYMLINK,
