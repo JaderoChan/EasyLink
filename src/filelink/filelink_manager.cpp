@@ -25,22 +25,22 @@ void FileLinkManager::createLinks(LinkType linkType, const QStringList& sourcePa
 
     {
         auto sourceDir = QFileInfo(sourcePaths.front()).absolutePath();
-        dlg_ = new ProgressDialog(linkType, sourceDir, targetDir);
+        dlg_ = new ProgressWidget(linkType, sourceDir, targetDir);
         dlg_->setAttribute(Qt::WA_DeleteOnClose);
     }
 
-    connect(worker_, &FileLinkWorker::progressUpdated, dlg_, &ProgressDialog::updateProgress);
-    connect(worker_, &FileLinkWorker::errorOccurred, dlg_, &ProgressDialog::appendErrorLog);
-    connect(worker_, &FileLinkWorker::conflictsDecisionWaited, dlg_, &ProgressDialog::decideConflicts);
-    connect(worker_, &FileLinkWorker::finished, dlg_, &ProgressDialog::onWorkFinished);
+    connect(worker_, &FileLinkWorker::progressUpdated, dlg_, &ProgressWidget::updateProgress);
+    connect(worker_, &FileLinkWorker::errorOccurred, dlg_, &ProgressWidget::appendErrorLog);
+    connect(worker_, &FileLinkWorker::conflictsDecisionWaited, dlg_, &ProgressWidget::decideConflicts);
+    connect(worker_, &FileLinkWorker::finished, dlg_, &ProgressWidget::onWorkFinished);
     connect(worker_, &FileLinkWorker::finished, &workerThread_, &QThread::quit);
 
-    connect(dlg_, &ProgressDialog::pauseTriggered, worker_, &FileLinkWorker::pause, Qt::DirectConnection);
-    connect(dlg_, &ProgressDialog::resumeTriggered, worker_, &FileLinkWorker::resume, Qt::DirectConnection);
-    connect(dlg_, &ProgressDialog::cancelTriggered, worker_, &FileLinkWorker::cancel, Qt::DirectConnection);
+    connect(dlg_, &ProgressWidget::pauseTriggered, worker_, &FileLinkWorker::pause, Qt::DirectConnection);
+    connect(dlg_, &ProgressWidget::resumeTriggered, worker_, &FileLinkWorker::resume, Qt::DirectConnection);
+    connect(dlg_, &ProgressWidget::cancelTriggered, worker_, &FileLinkWorker::cancel, Qt::DirectConnection);
 
-    connect(dlg_, &ProgressDialog::conflictsDecided, worker_, &FileLinkWorker::setConflictsDecision, Qt::DirectConnection);
-    connect(dlg_, &ProgressDialog::allConflictsDecided, worker_, &FileLinkWorker::setConflictsDecisionForAll, Qt::DirectConnection);
+    connect(dlg_, &ProgressWidget::conflictsDecided, worker_, &FileLinkWorker::setConflictsDecision, Qt::DirectConnection);
+    connect(dlg_, &ProgressWidget::allConflictsDecided, worker_, &FileLinkWorker::setConflictsDecisionForAll, Qt::DirectConnection);
 
     connect(this, &FileLinkManager::operate, worker_, &FileLinkWorker::run);
     connect(this, &FileLinkManager::cancel, worker_, &FileLinkWorker::cancel, Qt::DirectConnection);

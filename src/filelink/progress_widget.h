@@ -1,24 +1,24 @@
 #pragma once
 
-#include <qdialog.h>
 #include <qevent.h>
 #include <qtimer.h>
+#include <qwidget.h>
 
-#include "ui_progress_dialog.h"
+#include "ui_progress_widget.h"
 #include "error_log_dialog.h"
 #include "types.h"
 
-class ProgressDialog : public QDialog
+class ProgressWidget : public QWidget
 {
     Q_OBJECT
 
 public:
-    ProgressDialog(
+    ProgressWidget(
         LinkType linkType,
         const QString& sourceDir,   // For header area info display.
         const QString& targetDir,   // For header area info display.
         QWidget* parent = nullptr);
-    ~ProgressDialog();
+    ~ProgressWidget();
 
     void pause();
     void resume();
@@ -43,7 +43,6 @@ protected:
     virtual void updateText();
 
     void changeEvent(QEvent* event) override;
-    void keyPressEvent(QKeyEvent* event) override;
 
     void onPauseResumeBtnPressed();
     void onCancelBtnPressed();
@@ -76,7 +75,7 @@ private:
     void updateECSWidgetTipText();
 
 private:
-    Ui::ProgressDialog ui;
+    Ui::ProgressWidget ui;
     ErrorLogDialog* errorLogDlg_;
 
     LinkType linkType_;

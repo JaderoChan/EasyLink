@@ -1,4 +1,4 @@
-#include "progress_dialog.h"
+#include "progress_widget.h"
 
 #include <qdir.h>
 
@@ -8,12 +8,12 @@
 
 #define CLSNAME "ProgressDialog"
 
-ProgressDialog::ProgressDialog(
+ProgressWidget::ProgressWidget(
     LinkType linkType,
     const QString& sourceDir,
     const QString& targetDir,
     QWidget* parent)
-    : QDialog(parent),
+    : QWidget(parent),
     errorLogDlg_(new ErrorLogDialog(this)),
     linkType_(linkType)
 {
@@ -40,16 +40,16 @@ ProgressDialog::ProgressDialog(
     pageToMainWidget();
 
     speedRemainingTimeUpdateTimer_.setInterval(1000);
-    connect(&speedRemainingTimeUpdateTimer_, &QTimer::timeout, this, &ProgressDialog::updateSpeedRemainingTimeDisplay);
+    connect(&speedRemainingTimeUpdateTimer_, &QTimer::timeout, this, &ProgressWidget::updateSpeedRemainingTimeDisplay);
     speedRemainingTimeUpdateTimer_.start();
 
-    connect(ui.pauseResumeBtn, &QPushButton::clicked, this, &ProgressDialog::onPauseResumeBtnPressed);
-    connect(ui.cancelBtn, &QPushButton::clicked, this, &ProgressDialog::onCancelBtnPressed);
-    connect(ui.detailsBtn, &QPushButton::clicked, this, &ProgressDialog::onDetailsBtnPressed);
-    connect(ui.skipAllBtn, &QPushButton::clicked, this, &ProgressDialog::onSkipAllBtnPressed);
-    connect(ui.replaceAllBtn, &QPushButton::clicked, this, &ProgressDialog::onReplaceAllBtnPressed);
-    connect(ui.keepAllBtn, &QPushButton::clicked, this, &ProgressDialog::onKeepAllBtnPressed);
-    connect(ui.decideAllBtn, &QPushButton::clicked, this, &ProgressDialog::onDecideAllBtnPressed);
+    connect(ui.pauseResumeBtn, &QPushButton::clicked, this, &ProgressWidget::onPauseResumeBtnPressed);
+    connect(ui.cancelBtn, &QPushButton::clicked, this, &ProgressWidget::onCancelBtnPressed);
+    connect(ui.detailsBtn, &QPushButton::clicked, this, &ProgressWidget::onDetailsBtnPressed);
+    connect(ui.skipAllBtn, &QPushButton::clicked, this, &ProgressWidget::onSkipAllBtnPressed);
+    connect(ui.replaceAllBtn, &QPushButton::clicked, this, &ProgressWidget::onReplaceAllBtnPressed);
+    connect(ui.keepAllBtn, &QPushButton::clicked, this, &ProgressWidget::onKeepAllBtnPressed);
+    connect(ui.decideAllBtn, &QPushButton::clicked, this, &ProgressWidget::onDecideAllBtnPressed);
 
     updatePauseResumeBtnIcon();
     updateSpeedRemainingTimeDisplay();
@@ -57,49 +57,49 @@ ProgressDialog::ProgressDialog(
     updateText();
 }
 
-ProgressDialog::~ProgressDialog()
+ProgressWidget::~ProgressWidget()
 {
     cancel();
 }
 
-void ProgressDialog::pause()
+void ProgressWidget::pause()
 {
     paused_ = true;
     updatePauseResumeBtnIcon();
     emit pauseTriggered();
 }
 
-void ProgressDialog::resume()
+void ProgressWidget::resume()
 {
     paused_ = false;
     updatePauseResumeBtnIcon();
     emit resumeTriggered();
 }
 
-void ProgressDialog::cancel()
+void ProgressWidget::cancel()
 {
     emit cancelTriggered();
 }
 
-void ProgressDialog::updateProgress(const EntryPair& currentEntryPair, const LinkStats& stats)
+void ProgressWidget::updateProgress(const EntryPair& currentEntryPair, const LinkStats& stats)
 {
     stats_ = stats;
     updateCurrentEntryDisplay(currentEntryPair);
     updateStatsDisplay();
 }
 
-void ProgressDialog::appendErrorLog(LinkType linkType, const EntryPair& entryPair, const QString& errorMsg)
+void ProgressWidget::appendErrorLog(LinkType linkType, const EntryPair& entryPair, const QString& errorMsg)
 {
     errorLogDlg_->appendLog(linkType, entryPair, errorMsg);
 }
 
-void ProgressDialog::decideConflicts(const LinkTasks& conflicts)
+void ProgressWidget::decideConflicts(const LinkTasks& conflicts)
 {
     conflicts_ = conflicts;
     pageToECSWidget();
 }
 
-void ProgressDialog::onWorkFinished()
+void ProgressWidget::onWorkFinished()
 {
     if (stats_.failedEntries == 0)
     {
@@ -115,7 +115,7 @@ void ProgressDialog::onWorkFinished()
     updateSpeedRemainingTimeDisplay();
 }
 
-void ProgressDialog::laterShow(int ms)
+void ProgressWidget::laterShow(int ms)
 {
     auto timer = new QTimer(this);
     timer->setInterval(ms);
@@ -123,7 +123,7 @@ void ProgressDialog::laterShow(int ms)
     connect(timer, &QTimer::timeout, timer, &QObject::deleteLater);
 }
 
-void ProgressDialog::updateText()
+void ProgressWidget::updateText()
 {
     setWindowTitle(EASYTR(CLSNAME ".WindowTitle"));
     updateHeaderText1();
@@ -148,37 +148,24 @@ void ProgressDialog::updateText()
     ui.decideAllBtn->setText(EASYTR(CLSNAME ".Button.DecideAll"));
 }
 
-void ProgressDialog::changeEvent(QEvent* event)
+void ProgressWidget::changeEvent(QEvent* event)
 {
     if (event->type() == QEvent::LanguageChange)
         updateText();
-    QDialog::changeEvent(event);
+    QWidget::changeEvent(event);
 }
 
-void ProgressDialog::keyPressEvent(QKeyEvent* event)
-{
-    switch (event->key())
-    {
-        // 禁用键入ESC关闭对话框功能。
-        case Qt::Key_Escape:
-            break;
-        default:
-            QDialog::keyPressEvent(event);
-            break;
-    }
-}
-
-void ProgressDialog::onPauseResumeBtnPressed()
+void ProgressWidget::onPauseResumeBtnPressed()
 {
     paused_ ? resume() : pause();
 }
 
-void ProgressDialog::onCancelBtnPressed()
+void ProgressWidget::onCancelBtnPressed()
 {
     cancel();
 }
 
-void ProgressDialog::onDetailsBtnPressed()
+void ProgressWidget::onDetailsBtnPressed()
 {
     if (!errorLogDlg_->isVisible())
         errorLogDlg_->show();
@@ -186,25 +173,25 @@ void ProgressDialog::onDetailsBtnPressed()
     errorLogDlg_->raise();
 }
 
-void ProgressDialog::onReplaceAllBtnPressed()
+void ProgressWidget::onReplaceAllBtnPressed()
 {
     pageToMainWidget();
     emit allConflictsDecided(ECS_REPLACE);
 }
 
-void ProgressDialog::onSkipAllBtnPressed()
+void ProgressWidget::onSkipAllBtnPressed()
 {
     pageToMainWidget();
     emit allConflictsDecided(ECS_SKIP);
 }
 
-void ProgressDialog::onKeepAllBtnPressed()
+void ProgressWidget::onKeepAllBtnPressed()
 {
     pageToMainWidget();
     emit allConflictsDecided(ECS_KEEP);
 }
 
-void ProgressDialog::onDecideAllBtnPressed()
+void ProgressWidget::onDecideAllBtnPressed()
 {
     pageToMainWidget();
     ConflictDecisionDialog dlg(conflicts_, this);
@@ -224,7 +211,7 @@ void ProgressDialog::onDecideAllBtnPressed()
     }
 }
 
-bool ProgressDialog::normalizeECS(LinkTasks& tasks)
+bool ProgressWidget::normalizeECS(LinkTasks& tasks)
 {
     int counter = 0;
     for (auto& task : tasks)
@@ -238,7 +225,7 @@ bool ProgressDialog::normalizeECS(LinkTasks& tasks)
     return counter == stats_.conflicts;
 }
 
-void ProgressDialog::updateStatsDisplay()
+void ProgressWidget::updateStatsDisplay()
 {
     updateProgressDisplay();
     updateRemainingEntriesDisplay();
@@ -250,12 +237,12 @@ void ProgressDialog::updateStatsDisplay()
     }
 }
 
-void ProgressDialog::updateProgressDisplay()
+void ProgressWidget::updateProgressDisplay()
 {
     ui.progressBar->setValue(stats_.progress());
 }
 
-void ProgressDialog::updateSpeedRemainingTimeDisplay()
+void ProgressWidget::updateSpeedRemainingTimeDisplay()
 {
     speed_ = (stats_.processedEntries - lastProcessedEntries_);
     lastProcessedEntries_ = stats_.processedEntries;
@@ -283,7 +270,7 @@ void ProgressDialog::updateSpeedRemainingTimeDisplay()
     }
 }
 
-void ProgressDialog::updateCurrentEntryDisplay(const EntryPair& currentEntryPair)
+void ProgressWidget::updateCurrentEntryDisplay(const EntryPair& currentEntryPair)
 {
     const auto& source = currentEntryPair.source;
     ui.currentEntryValue->setText(source.absoluteFilePath());
@@ -302,12 +289,12 @@ void ProgressDialog::updateCurrentEntryDisplay(const EntryPair& currentEntryPair
     else ; // pass
 }
 
-void ProgressDialog::updateRemainingEntriesDisplay()
+void ProgressWidget::updateRemainingEntriesDisplay()
 {
     ui.remainingEntriesValue->setText(QString::number(stats_.totalEntries - stats_.processedEntries));
 }
 
-void ProgressDialog::updateFailedCountDisplay()
+void ProgressWidget::updateFailedCountDisplay()
 {
     ui.failedEntriesValue->setText(QString::number(stats_.failedEntries));
     // 如果失败项数量不为0则启用errorWgt。
@@ -315,12 +302,12 @@ void ProgressDialog::updateFailedCountDisplay()
         ui.errorWgt->setEnabled(true);
 }
 
-void ProgressDialog::pageToMainWidget()
+void ProgressWidget::pageToMainWidget()
 {
     ui.stackedWidget->setCurrentIndex(0);
 }
 
-void ProgressDialog::pageToECSWidget()
+void ProgressWidget::pageToECSWidget()
 {
     ui.stackedWidget->setCurrentIndex(1);
     updateECSWidgetTipText();   // 显式更新Tip文本以同步当前冲突项数量。
@@ -332,7 +319,7 @@ void ProgressDialog::pageToECSWidget()
     qApp->alert(this);          // 通过任务栏提醒用户需要决定冲突处理策略。
 }
 
-QString ProgressDialog::linkTypeString() const
+QString ProgressWidget::linkTypeString() const
 {
     switch (linkType_)
     {
@@ -342,7 +329,7 @@ QString ProgressDialog::linkTypeString() const
     }
 }
 
-void ProgressDialog::updateHeaderText1()
+void ProgressWidget::updateHeaderText1()
 {
     ui.headerText1->setText(
         QString("%1 %2 %3").arg(
@@ -353,7 +340,7 @@ void ProgressDialog::updateHeaderText1()
     );
 }
 
-void ProgressDialog::updatePauseResumeBtnIcon()
+void ProgressWidget::updatePauseResumeBtnIcon()
 {
     if (paused_)
         ui.pauseResumeBtn->setIcon(QIcon(":/icons/play.ico"));
@@ -361,14 +348,14 @@ void ProgressDialog::updatePauseResumeBtnIcon()
         ui.pauseResumeBtn->setIcon(QIcon(":/icons/pause.ico"));
 }
 
-void ProgressDialog::updateCurrentEntryTypeText()
+void ProgressWidget::updateCurrentEntryTypeText()
 {
     ui.fileText->setText(EASYTR(CLSNAME ".EntryType.File"));
     ui.directoryText->setText(EASYTR(CLSNAME ".EntryType.Dir"));
     ui.symbolText->setText(EASYTR(CLSNAME ".EntryType.Symbol"));
 }
 
-void ProgressDialog::updateECSWidgetTipText()
+void ProgressWidget::updateECSWidgetTipText()
 {
     ui.ecsTipText->setText(QString(EASYTR(CLSNAME ".Label.ECSTipText")).arg(stats_.conflicts));
 }

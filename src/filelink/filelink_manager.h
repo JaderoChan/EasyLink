@@ -5,7 +5,7 @@
 #include <qobject.h>
 
 #include "worker.h"
-#include "progress_dialog.h"
+#include "progress_widget.h"
 #include "types.h"
 
 class FileLinkManager : public QObject
@@ -25,5 +25,5 @@ signals:
 private:
     QThread workerThread_;
     FileLinkWorker* worker_ = nullptr;
-    ProgressDialog* dlg_ = nullptr;
+    ProgressWidget* dlg_ = nullptr;
 };

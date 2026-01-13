@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>ProgressDialog</class>
- <widget class="QDialog" name="ProgressDialog">
+ <class>ProgressWidget</class>
+ <widget class="QWidget" name="ProgressWidget">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -28,7 +28,7 @@
    </font>
   </property>
   <property name="windowTitle">
-   <string>ProgressDialog</string>
+   <string>ProgressWidget</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">
    <property name="spacing">
@@ -378,9 +378,6 @@ QPushButton:pressed
                    <iconset resource="filelink.qrc">
                     <normaloff>:/icons/pause.ico</normaloff>:/icons/pause.ico</iconset>
                   </property>
-                  <property name="autoDefault">
-                   <bool>false</bool>
-                  </property>
                   <property name="flat">
                    <bool>true</bool>
                   </property>
@@ -430,9 +427,6 @@ QPushButton:pressed
                   <property name="icon">
                    <iconset resource="filelink.qrc">
                     <normaloff>:/icons/cancel.ico</normaloff>:/icons/cancel.ico</iconset>
-                  </property>
-                  <property name="autoDefault">
-                   <bool>false</bool>
                   </property>
                   <property name="flat">
                    <bool>true</bool>
@@ -1038,6 +1032,15 @@ QPushButton:pressed
                <property name="shortcut">
                 <string>R</string>
                </property>
+               <property name="autoDefault">
+                <bool>true</bool>
+               </property>
+               <property name="default">
+                <bool>true</bool>
+               </property>
+               <property name="flat">
+                <bool>true</bool>
+               </property>
               </widget>
              </item>
              <item>
@@ -1102,6 +1105,12 @@ QPushButton:pressed
                </property>
                <property name="shortcut">
                 <string>S</string>
+               </property>
+               <property name="autoDefault">
+                <bool>true</bool>
+               </property>
+               <property name="flat">
+                <bool>true</bool>
                </property>
               </widget>
              </item>
@@ -1171,6 +1180,12 @@ QPushButton:pressed
                <property name="shortcut">
                 <string>K</string>
                </property>
+               <property name="autoDefault">
+                <bool>true</bool>
+               </property>
+               <property name="flat">
+                <bool>true</bool>
+               </property>
               </widget>
              </item>
              <item>
@@ -1235,6 +1250,12 @@ QPushButton:pressed
                </property>
                <property name="shortcut">
                 <string>D</string>
+               </property>
+               <property name="autoDefault">
+                <bool>true</bool>
+               </property>
+               <property name="flat">
+                <bool>true</bool>
                </property>
               </widget>
              </item>
@@ -1462,8 +1483,8 @@ QPushButton:pressed
                   <iconset resource="filelink.qrc">
                    <normaloff>:/icons/details.png</normaloff>:/icons/details.png</iconset>
                  </property>
-                 <property name="autoDefault">
-                  <bool>false</bool>
+                 <property name="flat">
+                  <bool>true</bool>
                  </property>
                 </widget>
                </item>
