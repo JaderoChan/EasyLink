@@ -150,9 +150,16 @@ void ProgressDialog::updateText()
     updateECSWidgetTipText();
     ui.skipAllBtn->setText(EASYTR(CLSNAME ".Button.SkipAll"));
     ui.replaceAllBtn->setText(EASYTR(CLSNAME ".Button.ReplaceAll"));
-    ui.replaceAllBtn->setToolTip(EASYTR(CLSNAME ".Button.ReplaceAll.ToolTip"));
     ui.keepAllBtn->setText(EASYTR(CLSNAME ".Button.KeepAll"));
+    ui.keepAllBtn->setToolTip(EASYTR(CLSNAME ".Button.KeepAll.ToolTip"));
     ui.decideAllBtn->setText(EASYTR(CLSNAME ".Button.DecideAll"));
+}
+
+void ProgressDialog::changeEvent(QEvent* event)
+{
+    if (event->type() == QEvent::LanguageChange)
+        updateText();
+    QDialog::changeEvent(event);
 }
 
 void ProgressDialog::onPauseResumeBtnPressed()
@@ -296,6 +303,11 @@ void ProgressDialog::pageToMainWidget()
 void ProgressDialog::pageToECSWidget()
 {
     ui.stackedWidget->setCurrentIndex(1);
+    ui.replaceAllBtn->setFocus();
+    ui.replaceAllBtn->setShortcut(QKeySequence::fromString("R"));
+    ui.skipAllBtn->setShortcut(QKeySequence::fromString("S"));
+    ui.keepAllBtn->setShortcut(QKeySequence::fromString("K"));
+    ui.decideAllBtn->setShortcut(QKeySequence::fromString("D"));
     qApp->alert(this);
 }
 

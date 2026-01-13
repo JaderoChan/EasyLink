@@ -1,6 +1,7 @@
 #pragma once
 
 #include <qdialog.h>
+#include <qevent.h>
 #include <qtimer.h>
 
 #include "ui_progress_dialog.h"
@@ -40,6 +41,8 @@ signals:
 
 protected:
     virtual void updateText();
+
+    void changeEvent(QEvent* event) override;
 
     void onPauseResumeBtnPressed();
     void onCancelBtnPressed();

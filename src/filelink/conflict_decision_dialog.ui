@@ -78,6 +78,9 @@
       </property>
       <item>
        <widget class="QTableView" name="tableView">
+        <property name="focusPolicy">
+         <enum>Qt::ClickFocus</enum>
+        </property>
         <property name="styleSheet">
          <string notr="true">QTableView {
 	border: none;
