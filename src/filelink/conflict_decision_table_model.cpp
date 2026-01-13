@@ -1,13 +1,13 @@
-#include "conflict_decision_tableview_model.h"
+#include "conflict_decision_table_model.h"
 
 #include <qdir.h>
 #include <qfileiconprovider.h>
 
-ConflictDecisionTableviewModel::ConflictDecisionTableviewModel(LinkTasks& conflicts, QObject* parent)
+ConflictDecisionTableModel::ConflictDecisionTableModel(LinkTasks& conflicts, QObject* parent)
     : QAbstractTableModel(parent), conflicts_(conflicts)
 {}
 
-QIcon ConflictDecisionTableviewModel::getFileIcon(const QFileInfo& fileinfo)
+QIcon ConflictDecisionTableModel::getFileIcon(const QFileInfo& fileinfo)
 {
     static QFileIconProvider fileIconProvider;
     if (fileinfo.exists())
@@ -16,17 +16,17 @@ QIcon ConflictDecisionTableviewModel::getFileIcon(const QFileInfo& fileinfo)
     QIcon icon;
 }
 
-int ConflictDecisionTableviewModel::rowCount(const QModelIndex& parent) const
+int ConflictDecisionTableModel::rowCount(const QModelIndex& parent) const
 {
     return conflicts_.size();
 }
 
-int ConflictDecisionTableviewModel::columnCount(const QModelIndex& parent) const
+int ConflictDecisionTableModel::columnCount(const QModelIndex& parent) const
 {
     return 2;
 }
 
-QVariant ConflictDecisionTableviewModel::data(const QModelIndex& index, int role) const
+QVariant ConflictDecisionTableModel::data(const QModelIndex& index, int role) const
 {
     int row = index.row();
     int col = index.column();
@@ -68,7 +68,7 @@ QVariant ConflictDecisionTableviewModel::data(const QModelIndex& index, int role
     return QVariant();
 }
 
-QVariant ConflictDecisionTableviewModel::headerData(int section, Qt::Orientation orientation, int role) const
+QVariant ConflictDecisionTableModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
     if (orientation != Qt::Horizontal || section < 0 || section >= columnCount())
         return QVariant();
@@ -102,7 +102,7 @@ QVariant ConflictDecisionTableviewModel::headerData(int section, Qt::Orientation
     return QVariant();
 }
 
-Qt::ItemFlags ConflictDecisionTableviewModel::flags(const QModelIndex& index) const
+Qt::ItemFlags ConflictDecisionTableModel::flags(const QModelIndex& index) const
 {
     int row = index.row();
     int col = index.column();
@@ -114,7 +114,7 @@ Qt::ItemFlags ConflictDecisionTableviewModel::flags(const QModelIndex& index) co
     return flag;
 }
 
-bool ConflictDecisionTableviewModel::setData(const QModelIndex& index, const QVariant& value, int role)
+bool ConflictDecisionTableModel::setData(const QModelIndex& index, const QVariant& value, int role)
 {
     int row = index.row();
     int col = index.column();
@@ -139,7 +139,7 @@ bool ConflictDecisionTableviewModel::setData(const QModelIndex& index, const QVa
     return true;
 }
 
-bool ConflictDecisionTableviewModel::setHeaderData(int section, Qt::Orientation orientation, const QVariant& value, int role)
+bool ConflictDecisionTableModel::setHeaderData(int section, Qt::Orientation orientation, const QVariant& value, int role)
 {
     if (orientation != Qt::Horizontal || section < 0 || section >= columnCount())
         return false;
@@ -164,7 +164,7 @@ bool ConflictDecisionTableviewModel::setHeaderData(int section, Qt::Orientation 
     return true;
 }
 
-EntryConflictStrategy ConflictDecisionTableviewModel::getECSByCheckState(Qt::CheckState source, Qt::CheckState target)
+EntryConflictStrategy ConflictDecisionTableModel::getECSByCheckState(Qt::CheckState source, Qt::CheckState target)
 {
     if (source == Qt::Unchecked && target == Qt::Unchecked)
         return ECS_NONE;

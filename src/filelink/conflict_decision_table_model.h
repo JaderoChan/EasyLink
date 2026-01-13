@@ -10,7 +10,7 @@
 #define FILENAME_ROLE (Qt::UserRole + 2)
 #define SAME_DATE_SIZE_ROLE (Qt::UserRole + 3)
 
-class ConflictDecisionTableviewModel : public QAbstractTableModel
+class ConflictDecisionTableModel : public QAbstractTableModel
 {
     Q_OBJECT
 
@@ -18,7 +18,7 @@ public:
     // Non-thread-safe
     static QIcon getFileIcon(const QFileInfo& fileinfo);
 
-    explicit ConflictDecisionTableviewModel(LinkTasks& conflicts, QObject* parent = nullptr);
+    explicit ConflictDecisionTableModel(LinkTasks& conflicts, QObject* parent = nullptr);
 
     int rowCount(const QModelIndex& parent = QModelIndex()) const override;
     int columnCount(const QModelIndex& parent = QModelIndex()) const override;

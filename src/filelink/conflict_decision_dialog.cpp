@@ -2,7 +2,7 @@
 
 #include <easy_translate.hpp>
 
-#include "conflict_decision_tableview_model.h"
+#include "conflict_decision_table_model.h"
 
 #define CLSNAME "ConflictDecisionDialog"
 
@@ -11,7 +11,7 @@ ConflictDecisionDialog::ConflictDecisionDialog(LinkTasks& conflicts, QWidget* pa
 {
     ui.setupUi(this);
 
-    auto* model = new ConflictDecisionTableviewModel(conflicts, this);
+    auto* model = new ConflictDecisionTableModel(conflicts, this);
     ui.tableView->setModel(model);
     ui.tableView->verticalHeader()->setMinimumSectionSize(36);
     ui.tableView->verticalHeader()->setMaximumSectionSize(36);
