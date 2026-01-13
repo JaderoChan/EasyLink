@@ -54,8 +54,8 @@ QVariant ConflictDecisionTableModel::data(const QModelIndex& index, int role) co
             }
             break;
         }
-        // case Qt::DecorationRole:
-        //     return getFileIcon(QFileInfo(entry.path));
+        case Qt::DecorationRole:
+            return getFileIcon(QFileInfo(entry.path));
         case URL_ROLE:
             return entry.parentPath;
         case SAME_DATE_SIZE_ROLE:
