@@ -1,6 +1,7 @@
 #pragma once
 
 #include <qdialog.h>
+#include <qevent.h>
 
 #include "ui_conflict_decision_dialog.h"
 #include "types.h"
@@ -12,6 +13,8 @@ public:
 
 protected:
     virtual void updateText();
+
+    void changeEvent(QEvent* event) override;
 
     void onSkipSameDateSizeCbToggled();
 

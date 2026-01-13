@@ -212,7 +212,7 @@ void ProgressDialog::onDecideAllBtnPressed()
     int ret = dlg.exec();
     if (ret == QDialog::Accepted)
     {
-        // 如果所有冲突条目最终都使用Skip策略则直接发送“对所有冲突项采用Skip策略”信号，以进行优化。
+        // 如果所有冲突项都使用None/Skip策略则直接发送“对所有冲突项采用Skip策略”信号，以进行优化。
         if (normalizeECS(conflicts_))
             emit allConflictsDecided(ECS_SKIP);
         else
@@ -262,7 +262,7 @@ void ProgressDialog::updateSpeedRemainingTimeDisplay()
     lastProcessedEntries_ = stats_.processedEntries;
     ui.speedValue->setText(QString::number(speed_));
 
-    // 保证数字具有两位，使用0进行补位。
+    // 保证数字具有两位，使用0进行左补位。
     static auto formatNumberString = [](int num) -> QString
     { return (num < 10 ? "0" : "") + QString::number(num); };
 
@@ -294,9 +294,12 @@ void ProgressDialog::updateCurrentEntryDisplay(const EntryPair& currentEntryPair
     ui.directoryText->hide();
     ui.symbolText->hide();
 
-    if (source.isFile())                ui.fileText->show();
-    else if (source.isDir())            ui.directoryText->show();
-    else if (source.isSymbolicLink())   ui.symbolText->show();
+    if (source.isSymbolicLink() || source.isShortcut() || source.isBundle() || source.isJunction())
+        ui.symbolText->show();
+    else if (source.isFile())
+        ui.fileText->show();
+    else if (source.isDir())
+        ui.directoryText->show();
     else ; // pass
 }
 
@@ -308,7 +311,7 @@ void ProgressDialog::updateRemainingEntriesDisplay()
 void ProgressDialog::updateFailedCountDisplay()
 {
     ui.failedEntriesValue->setText(QString::number(stats_.failedEntries));
-    // 如果失败项数量不为0则启用errorWgt，用以提醒用户与打开错误日志窗口。
+    // 如果失败项数量不为0则启用errorWgt。
     if (stats_.failedEntries > 0 && !ui.errorWgt->isEnabled())
         ui.errorWgt->setEnabled(true);
 }
@@ -321,13 +324,13 @@ void ProgressDialog::pageToMainWidget()
 void ProgressDialog::pageToECSWidget()
 {
     ui.stackedWidget->setCurrentIndex(1);
-    updateECSWidgetTipText();   // 由于Tip文本中包含了冲突数量，需要显式更新文本。
+    updateECSWidgetTipText();   // 显式更新Tip文本以同步当前冲突项数量。
     ui.replaceAllBtn->setFocus();
     ui.replaceAllBtn->setShortcut(QKeySequence::fromString("R"));
     ui.skipAllBtn->setShortcut(QKeySequence::fromString("S"));
     ui.keepAllBtn->setShortcut(QKeySequence::fromString("K"));
     ui.decideAllBtn->setShortcut(QKeySequence::fromString("D"));
-    qApp->alert(this);          // 通过任务栏提醒用户需要抉择。
+    qApp->alert(this);          // 通过任务栏提醒用户需要决定冲突处理策略。
 }
 
 QString ProgressDialog::linkTypeString() const

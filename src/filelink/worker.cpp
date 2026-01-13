@@ -10,8 +10,6 @@
 
 constexpr int ProgressUpdateInterval = 20;
 
-// todo: 优化对符号链接条目的支持（消歧义等）
-
 FileLinkWorker::FileLinkWorker(QObject* parent)
     : QObject(parent)
 {}
@@ -34,7 +32,12 @@ bool FileLinkWorker::isOnSameDriver(const QString& a, const QString& b)
 #endif
 }
 
-void FileLinkWorker::createLink(LinkType linkType, QFileInfo source, QFileInfo target)
+bool FileLinkWorker::isWindowsSymlink(const QFileInfo& fileinfo)
+{
+    return fileinfo.isShortcut() || fileinfo.isJunction();
+}
+
+void FileLinkWorker::createLink(LinkType linkType, const QFileInfo& source, const QFileInfo& target)
 {
     namespace fs = std::filesystem;
 
@@ -78,15 +81,19 @@ void FileLinkWorker::run()
 {
     progressUpdateTimer_.start();
 
+    // 收集条目并创建链接任务。
     collectEntries();
+    // 强制更新当前进度。
     tryUpdateProgress(true);
 
+    // 处理用户是否已暂停或取消操作。
     if (processPauseAndCancel())
     {
         emit finished();
         return;
     }
 
+    // 处理链接任务。
     tasks_ = processTasks();
     tryUpdateProgress(true);
 
@@ -96,12 +103,14 @@ void FileLinkWorker::run()
         return;
     }
 
+    // 如果冲突项列表为空则直接报告操作已完成并返回。
     if (tasks_.isEmpty())
     {
         emit finished();
         return;
     }
 
+    // 因冲突项列表非空，等待用户决定。
     waitConflictsDecision();
     if (processPauseAndCancel())
     {
@@ -109,6 +118,7 @@ void FileLinkWorker::run()
         return;
     }
 
+    // 如果用户使用Skip策略并应用至所有冲突项，则只更新统计数据。
     if (ecsApplyToAll_ && ecsOfAll == ECS_SKIP)
     {
         stats_.processedEntries += stats_.conflicts;
@@ -173,7 +183,7 @@ bool FileLinkWorker::processPauseAndCancel()
     return cancelled_;
 }
 
-void FileLinkWorker::addTask(LinkType linkType, QFileInfo sourceEntry, QFileInfo targetEntry)
+void FileLinkWorker::addTask(LinkType linkType, const QFileInfo& sourceEntry, const QFileInfo& targetEntry)
 {
     currentEntryPair_ = {sourceEntry, targetEntry};
     tasks_.enqueue({linkType, currentEntryPair_, ECS_NONE});
@@ -181,12 +191,12 @@ void FileLinkWorker::addTask(LinkType linkType, QFileInfo sourceEntry, QFileInfo
     tryUpdateProgress();
 }
 
-bool FileLinkWorker::createLink(LinkType linkType, QFileInfo source, QFileInfo target, EntryConflictStrategy ecs)
+bool FileLinkWorker::createLink(LinkType linkType, QFileInfo& source, QFileInfo& target, EntryConflictStrategy ecs)
 {
     source.refresh();
     target.refresh();
 
-    if (!isOnSameDriver(source.absoluteFilePath(), target.absoluteFilePath()))
+    if (linkType == LT_HARDLINK && !isOnSameDriver(source.absoluteFilePath(), target.absoluteFilePath()))
         THROW_RTERR("The specified original file and the target are located on different devices or file systems.");
 
     if (source.exists())
@@ -195,13 +205,13 @@ bool FileLinkWorker::createLink(LinkType linkType, QFileInfo source, QFileInfo t
         {
             createLink(linkType, source, target);
         }
-        else if (target.isFile())
+        else if (target.isFile() || isWindowsSymlink(target))
         {
             ecs = ecsApplyToAll_ ? ecsOfAll.load() : ecs;
             switch (ecs)
             {
                 case ECS_NONE:
-                    return true;
+                    return false;
                 case ECS_REPLACE:
                     if (removeToTrash_)
                     {
@@ -218,7 +228,7 @@ bool FileLinkWorker::createLink(LinkType linkType, QFileInfo source, QFileInfo t
                 case ECS_SKIP:
                     break;
                 case ECS_KEEP:
-                    target = generateNewPath(target);
+                    generateNewPath(target);
                     createLink(linkType, source, target);
                     break;
                 default:
@@ -235,7 +245,7 @@ bool FileLinkWorker::createLink(LinkType linkType, QFileInfo source, QFileInfo t
         THROW_RTERR("The source file does not exist.");
     }
 
-    return false;
+    return true;
 }
 
 LinkTasks FileLinkWorker::processTasks()
@@ -250,7 +260,7 @@ LinkTasks FileLinkWorker::processTasks()
         currentEntryPair_ = task.entryPair;
         try
         {
-            bool isConflict = createLink(task.linkType, task.entryPair.source, task.entryPair.target, task.ecs);
+            bool isConflict = !createLink(task.linkType, currentEntryPair_.source, currentEntryPair_.target, task.ecs);
             if (isConflict)
             {
                 stats_.conflicts++;
@@ -313,30 +323,30 @@ void FileLinkWorker::collectEntriesForHardlinkHelper(const QString& sourcePath, 
     if (processPauseAndCancel())
         return;
 
-    if (QFileInfo(sourcePath).isDir())
+    QFileInfo sourceEntry(sourcePath);
+    if (sourceEntry.isFile() || isWindowsSymlink(sourceEntry))
+    {
+        QFileInfo targetEntry(targetDir + "/" + sourceEntry.fileName());
+        addTask(LT_HARDLINK, sourceEntry, targetEntry);
+    }
+    else if (sourceEntry.isDir())
     {
         QDir sourceDir(sourcePath);
-        QFileInfoList sourceEntries = sourceDir.entryInfoList(
+        QFileInfoList entries = sourceDir.entryInfoList(
             QDir::Files | QDir::Dirs | QDir::NoDotAndDotDot | QDir::Hidden | QDir::System
         );
 
-        for (const auto& sourceEntry : sourceEntries)
+        for (auto& entry : entries)
         {
             if (processPauseAndCancel())
                 return;
 
-            QFileInfo targetEntry(targetDir + "/" + sourceEntry.fileName());
-            if (sourceEntry.isDir())
-                collectEntriesForHardlinkHelper(sourceEntry.absoluteFilePath(), targetEntry.absoluteFilePath());
+            QFileInfo targetEntry(targetDir + "/" + entry.fileName());
+            if (entry.isFile() || isWindowsSymlink(entry))
+                addTask(LT_HARDLINK, entry, targetEntry);
             else
-                addTask(LT_HARDLINK, sourceEntry, targetEntry);
+                collectEntriesForHardlinkHelper(entry.absoluteFilePath(), targetEntry.absoluteFilePath());
         }
-    }
-    else
-    {
-        QFileInfo sourceEntry(sourcePath);
-        QFileInfo targetEntry(targetDir + "/" + sourceEntry.fileName());
-        addTask(LT_HARDLINK, sourceEntry, targetEntry);
     }
 }
 
@@ -371,7 +381,7 @@ void FileLinkWorker::collectEntries()
 }
 
 // todo: 支持用户自定义重命名规则。
-QFileInfo FileLinkWorker::generateNewPath(QFileInfo file)
+void FileLinkWorker::generateNewPath(QFileInfo& file)
 {
     auto baseName = file.completeBaseName();
     auto suffix = file.suffix();
@@ -382,6 +392,4 @@ QFileInfo FileLinkWorker::generateNewPath(QFileInfo file)
     {
         file.setFile(QString("%1/%2 (%3).%4").arg(path, baseName, QString::number(counter++), suffix));
     } while (file.exists());
-
-    return file;
 }

@@ -36,6 +36,13 @@ void ConflictDecisionDialog::updateText()
     ui.cancelBtn->setText(EASYTR("CommonButton.Cancel"));
 }
 
+void ConflictDecisionDialog::changeEvent(QEvent* event)
+{
+    if (event->type() == QEvent::LanguageChange)
+        updateText();
+    QDialog::changeEvent(event);
+}
+
 void ConflictDecisionDialog::onSkipSameDateSizeCbToggled()
 {
     // todo

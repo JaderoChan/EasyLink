@@ -10,6 +10,7 @@ ErrorLogDialog::ErrorLogDialog(QWidget* parent)
     : QDialog(parent)
 {
     ui.setupUi(this);
+    updateText();
 }
 
 void ErrorLogDialog::appendLog(LinkType linkType, const EntryPair& entryPair, const QString& errorMsg)
