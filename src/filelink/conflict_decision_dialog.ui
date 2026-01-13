@@ -19,6 +19,18 @@
    <string>ConflictDecisionDialog</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">
+   <property name="leftMargin">
+    <number>18</number>
+   </property>
+   <property name="topMargin">
+    <number>9</number>
+   </property>
+   <property name="rightMargin">
+    <number>18</number>
+   </property>
+   <property name="bottomMargin">
+    <number>9</number>
+   </property>
    <item>
     <widget class="QWidget" name="widget" native="true">
      <layout class="QVBoxLayout" name="verticalLayout">
@@ -83,30 +95,37 @@
           <stylestrategy>PreferAntialias</stylestrategy>
          </font>
         </property>
-        <property name="focusPolicy">
-         <enum>Qt::ClickFocus</enum>
-        </property>
         <property name="styleSheet">
          <string notr="true">QTableView {
 	border: none;
 	outline: none;
 }
 
-QTableView::item:focus {
+QTableView::item {
 	border: none;
 	outline: none;
+}
+
+QTableView:focus {
+	border: none;
+	outline: none;
+}
+
+QTableView::item:selected {
+	background-color: rgba(0, 100, 180, 96);
+	color: black;
 }</string>
         </property>
         <property name="frameShape">
          <enum>QFrame::NoFrame</enum>
         </property>
-        <property name="selectionMode">
-         <enum>QAbstractItemView::NoSelection</enum>
+        <property name="alternatingRowColors">
+         <bool>true</bool>
         </property>
         <property name="iconSize">
          <size>
-          <width>32</width>
-          <height>32</height>
+          <width>36</width>
+          <height>36</height>
          </size>
         </property>
         <property name="verticalScrollMode">
@@ -115,6 +134,15 @@ QTableView::item:focus {
         <property name="horizontalScrollMode">
          <enum>QAbstractItemView::ScrollPerPixel</enum>
         </property>
+        <attribute name="verticalHeaderVisible">
+         <bool>false</bool>
+        </attribute>
+        <attribute name="verticalHeaderMinimumSectionSize">
+         <number>48</number>
+        </attribute>
+        <attribute name="verticalHeaderDefaultSectionSize">
+         <number>48</number>
+        </attribute>
        </widget>
       </item>
      </layout>
