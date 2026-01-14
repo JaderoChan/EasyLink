@@ -89,7 +89,7 @@ void ProgressWidget::appendErrorLog(LinkType linkType, const EntryPair& entryPai
 void ProgressWidget::decideConflicts(const LinkTasks& conflicts)
 {
     conflicts_ = conflicts;
-    pageToECSWidget();
+    pageToEcsWidget();
 }
 
 void ProgressWidget::onWorkFinished()
@@ -133,7 +133,7 @@ void ProgressWidget::updateText()
     ui.remainingEntriesText->setText(EASYTR(CLSNAME ".Label.RemainingEntries"));
     ui.failedEntriesText->setText(EASYTR(CLSNAME ".Label.FailedEntries"));
     ui.detailsBtn->setText(EASYTR(CLSNAME ".Button.Details"));
-    updateECSWidgetTipText();
+    updateEcsWidgetTipText();
     ui.skipAllBtn->setText(EASYTR(CLSNAME ".Button.SkipAll"));
     ui.replaceAllBtn->setText(EASYTR(CLSNAME ".Button.ReplaceAll"));
     ui.keepAllBtn->setText(EASYTR(CLSNAME ".Button.KeepAll"));
@@ -192,7 +192,7 @@ void ProgressWidget::onDecideAllBtnPressed()
     if (ret == QDialog::Accepted)
     {
         // 如果所有冲突项都使用None/Skip策略则直接发送“对所有冲突项采用Skip策略”信号，以进行优化。
-        if (normalizeECS(conflicts_))
+        if (clearEcs(conflicts_))
             emit allConflictsDecided(ECS_SKIP);
         else
             emit conflictsDecided(conflicts_);
@@ -204,7 +204,7 @@ void ProgressWidget::onDecideAllBtnPressed()
     }
 }
 
-bool ProgressWidget::normalizeECS(LinkTasks& tasks)
+bool ProgressWidget::clearEcs(LinkTasks& tasks)
 {
     int counter = 0;
     for (auto& task : tasks)
@@ -301,10 +301,10 @@ void ProgressWidget::pageToMainWidget()
     ui.stackedWidget->setCurrentIndex(0);
 }
 
-void ProgressWidget::pageToECSWidget()
+void ProgressWidget::pageToEcsWidget()
 {
     ui.stackedWidget->setCurrentIndex(1);
-    updateECSWidgetTipText();   // 显式更新Tip文本以同步当前冲突项数量。
+    updateEcsWidgetTipText();   // 显式更新Tip文本以同步当前冲突项数量。
     ui.replaceAllBtn->setFocus();
     ui.replaceAllBtn->setShortcut(QKeySequence::fromString("R"));
     ui.skipAllBtn->setShortcut(QKeySequence::fromString("S"));
@@ -349,7 +349,7 @@ void ProgressWidget::updateCurrentEntryTypeText()
     ui.symbolText->setText(EASYTR(CLSNAME ".EntryType.Symbol"));
 }
 
-void ProgressWidget::updateECSWidgetTipText()
+void ProgressWidget::updateEcsWidgetTipText()
 {
-    ui.ecsTipText->setText(QString(EASYTR(CLSNAME ".Label.ECSTipText")).arg(stats_.conflicts));
+    ui.ecsTipText->setText(QString(EASYTR(CLSNAME ".Label.EcsTipText")).arg(stats_.conflicts));
 }

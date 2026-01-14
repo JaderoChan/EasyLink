@@ -32,5 +32,5 @@
     "ProgressDialog.EntryType.File": "File",
     "ProgressDialog.EntryType.Dir": "Directory",
     "ProgressDialog.EntryType.Symbol": "Symbolic",
-    "ProgressDialog.Label.ECSTipText": "The target contains %1 entries with the same name"
+    "ProgressDialog.Label.EcsTipText": "The target contains %1 entries with the same name"
 }

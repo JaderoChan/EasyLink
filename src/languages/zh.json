@@ -32,5 +32,5 @@
     "ProgressDialog.EntryType.File": "文件",
     "ProgressDialog.EntryType.Dir": "目录",
     "ProgressDialog.EntryType.Symbol": "符号",
-    "ProgressDialog.Label.ECSTipText": "目标下包含 %1 个同名条目"
+    "ProgressDialog.Label.EcsTipText": "目标下包含 %1 个同名条目"
 }

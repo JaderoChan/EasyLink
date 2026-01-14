@@ -97,7 +97,7 @@ bool ConflictDecisionTableModel::setData(const QModelIndex& index, const QVarian
     auto target = (col == 1 ?
         value.value<Qt::CheckState>() :
         data(right, Qt::CheckStateRole).value<Qt::CheckState>());
-    conflicts_[row].ecs = getECSByCheckState(source, target);
+    conflicts_[row].ecs = getEcsByCheckState(source, target);
 
     emit dataCheckStateToggled(index, value.toBool());
     emit dataChanged(left, right, {Qt::CheckStateRole});
@@ -112,7 +112,7 @@ void ConflictDecisionTableModel::setAllSourceChecked(bool checked)
         auto& conflict = conflicts_[row];
         Qt::CheckState source = checked ? Qt::Checked : Qt::Unchecked;
         auto target = data(createIndex(row, 1), Qt::CheckStateRole).value<Qt::CheckState>();
-        conflicts_[row].ecs = getECSByCheckState(source, target);
+        conflicts_[row].ecs = getEcsByCheckState(source, target);
     }
 
     emit dataChanged(createIndex(0, 0), createIndex(rowCount() - 1, columnCount() - 1), {Qt::CheckStateRole});
@@ -125,13 +125,13 @@ void ConflictDecisionTableModel::setAllTargetChecked(bool checked)
         auto& conflict = conflicts_[row];
         Qt::CheckState target = checked ? Qt::Checked : Qt::Unchecked;
         auto source = data(createIndex(row, 0), Qt::CheckStateRole).value<Qt::CheckState>();
-        conflicts_[row].ecs = getECSByCheckState(source, target);
+        conflicts_[row].ecs = getEcsByCheckState(source, target);
     }
 
     emit dataChanged(createIndex(0, 0), createIndex(rowCount() - 1, columnCount() - 1), {Qt::CheckStateRole});
 }
 
-EntryConflictStrategy ConflictDecisionTableModel::getECSByCheckState(Qt::CheckState source, Qt::CheckState target)
+EntryConflictStrategy ConflictDecisionTableModel::getEcsByCheckState(Qt::CheckState source, Qt::CheckState target)
 {
     if (source == Qt::Unchecked && target == Qt::Unchecked)
         return ECS_NONE;

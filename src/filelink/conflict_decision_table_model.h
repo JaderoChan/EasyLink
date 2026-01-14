@@ -34,7 +34,7 @@ signals:
     void dataCheckStateToggled(const QModelIndex& idx, bool checked);
 
 private:
-    static EntryConflictStrategy getECSByCheckState(Qt::CheckState source, Qt::CheckState target);
+    static EntryConflictStrategy getEcsByCheckState(Qt::CheckState source, Qt::CheckState target);
 
     LinkTasks& conflicts_;
 };
