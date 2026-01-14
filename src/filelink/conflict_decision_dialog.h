@@ -19,7 +19,7 @@ protected:
     void changeEvent(QEvent* event) override;
     bool eventFilter(QObject* obj, QEvent* event) override;
 
-    void onModelDataCheckStateToggled(const QModelIndex& idx, bool checked);
+    void onModelDataCheckStateChanged();
     void onSkipSameDateSizeCbToggled();
 
 private:

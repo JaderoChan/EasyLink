@@ -34,8 +34,7 @@ public:
     int checkedTargets() const { return checkedTargets_; };
 
 signals:
-    // 当单个项的CheckState发生改变时发出。
-    void dataCheckStateToggled(const QModelIndex& idx, bool checked);
+    void checkedCountChanged();
 
 private:
     static EntryConflictStrategy getEcsByCheckState(Qt::CheckState source, Qt::CheckState target);

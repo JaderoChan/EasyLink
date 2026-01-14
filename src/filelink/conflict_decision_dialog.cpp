@@ -51,7 +51,7 @@ ConflictDecisionDialog::ConflictDecisionDialog(LinkTasks& conflicts, QWidget* pa
 
     sameDateSizeEntries_ = model_->match(model_->index(0, 0), SAME_DATE_SIZE_ROLE, true, -1).size();
 
-    connect(model_, &ConflictDecisionTableModel::dataCheckStateToggled, this, &ConflictDecisionDialog::onModelDataCheckStateToggled);
+    connect(model_, &ConflictDecisionTableModel::checkedCountChanged, this, &ConflictDecisionDialog::onModelDataCheckStateChanged);
 
     connect(ui.okBtn, &QPushButton::clicked, this, &QDialog::accept);
     connect(ui.cancelBtn, &QPushButton::clicked, this, &QDialog::reject);
@@ -120,11 +120,9 @@ bool ConflictDecisionDialog::eventFilter(QObject* obj, QEvent* event)
                         {
                             case Qt::Unchecked: // Fallthorugh
                             case Qt::PartiallyChecked:
-                                ui.sourceHeaderCb->setCheckState(Qt::Checked);
                                 model_->setAllSourceChecked(true);
                                 break;
                             case Qt::Checked:
-                                ui.sourceHeaderCb->setCheckState(Qt::Unchecked);
                                 model_->setAllSourceChecked(false);
                                 break;
                             default:
@@ -137,11 +135,9 @@ bool ConflictDecisionDialog::eventFilter(QObject* obj, QEvent* event)
                         {
                             case Qt::Unchecked: // Fallthorugh
                             case Qt::PartiallyChecked:
-                                ui.targetHeaderCb->setCheckState(Qt::Checked);
                                 model_->setAllTargetChecked(true);
                                 break;
                             case Qt::Checked:
-                                ui.targetHeaderCb->setCheckState(Qt::Unchecked);
                                 model_->setAllTargetChecked(false);
                                 break;
                             default:
@@ -159,37 +155,26 @@ bool ConflictDecisionDialog::eventFilter(QObject* obj, QEvent* event)
 }
 
 // 当用户更改单个数据项的CheckState时，同步表头的CheckState。
-void ConflictDecisionDialog::onModelDataCheckStateToggled(const QModelIndex& idx, bool checked)
+void ConflictDecisionDialog::onModelDataCheckStateChanged()
 {
-    switch (idx.column())
-    {
-        case 0:
-        {
-            int checked = model_->checkedSources();
-            if (checked == 0)
-                ui.sourceHeaderCb->setCheckState(Qt::Unchecked);
-            else if (checked == conflicts_.size())
-                ui.sourceHeaderCb->setCheckState(Qt::Checked);
-            else
-                ui.sourceHeaderCb->setCheckState(Qt::PartiallyChecked);
-            break;
-        }
-        case 1:
-        {
-            int checked = model_->checkedTargets();
-            if (checked == 0)
-                ui.targetHeaderCb->setCheckState(Qt::Unchecked);
-            else if (checked == conflicts_.size())
-                ui.targetHeaderCb->setCheckState(Qt::Checked);
-            else
-                ui.targetHeaderCb->setCheckState(Qt::PartiallyChecked);
-            break;
-        }
-        default:
-            break;
-    }
+    int checked = model_->checkedSources();
+    if (checked == 0)
+        ui.sourceHeaderCb->setCheckState(Qt::Unchecked);
+    else if (checked == conflicts_.size())
+        ui.sourceHeaderCb->setCheckState(Qt::Checked);
+    else
+        ui.sourceHeaderCb->setCheckState(Qt::PartiallyChecked);
+
+    checked = model_->checkedTargets();
+    if (checked == 0)
+        ui.targetHeaderCb->setCheckState(Qt::Unchecked);
+    else if (checked == conflicts_.size())
+        ui.targetHeaderCb->setCheckState(Qt::Checked);
+    else
+        ui.targetHeaderCb->setCheckState(Qt::PartiallyChecked);
 }
 
+// todo：修复bug，筛选过后表头逻辑没有与筛选后的条目列表相契合。
 void ConflictDecisionDialog::onSkipSameDateSizeCbToggled()
 {
     if (!isFiltered_)

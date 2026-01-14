@@ -104,7 +104,7 @@ bool ConflictDecisionTableModel::setData(const QModelIndex& idx, const QVariant&
     else
         checkedTargets_ += source == Qt::Checked ? 1 : -1;
 
-    emit dataCheckStateToggled(idx, value.toBool());
+    emit checkedCountChanged();
     emit dataChanged(left, right, {Qt::CheckStateRole});
 
     return true;
@@ -120,7 +120,11 @@ void ConflictDecisionTableModel::setAllSourceChecked(bool checked)
         conflicts_[row].ecs = getEcsByCheckState(source, target);
     }
 
-    checkedSources_ = checked ? conflicts_.size() : 0;
+    int newCheckedSources = checked ? conflicts_.size() : 0;
+    if (checkedSources_ != newCheckedSources)
+        emit checkedCountChanged();
+    checkedSources_ = newCheckedSources;
+
     emit dataChanged(index(0, 0), index(rowCount() - 1, columnCount() - 1), {Qt::CheckStateRole});
 }
 
@@ -134,10 +138,15 @@ void ConflictDecisionTableModel::setAllTargetChecked(bool checked)
         conflicts_[row].ecs = getEcsByCheckState(source, target);
     }
 
-    checkedTargets_ = checked ? conflicts_.size() : 0;
+    int newCheckedTargets = checked ? conflicts_.size() : 0;
+    if (checkedTargets_ != newCheckedTargets)
+        emit checkedCountChanged();
+    checkedTargets_ = newCheckedTargets;
+
     emit dataChanged(index(0, 0), index(rowCount() - 1, columnCount() - 1), {Qt::CheckStateRole});
 }
 
+// todo：统计checked数量，如果发生改变则发射checkedCountChanged信号。
 void ConflictDecisionTableModel::setAllSameDateSizeEcs(EntryConflictStrategy ecs)
 {
     for (int row = 0; row < conflicts_.size(); ++row)
