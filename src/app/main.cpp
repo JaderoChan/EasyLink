@@ -6,7 +6,7 @@
 
 #include "config.h"
 #include "language.h"
-#include "filelink/filelink_manager.h"
+#include "filelink/manager.h"
 
 int main(int argc, char* argv[])
 {

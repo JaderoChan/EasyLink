@@ -1,4 +1,4 @@
-#include "filelink_manager.h"
+#include "manager.h"
 
 #include <qdir.h>
 #include <qfileinfo.h>
