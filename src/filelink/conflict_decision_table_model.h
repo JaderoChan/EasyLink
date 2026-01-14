@@ -30,6 +30,9 @@ public:
     void setAllTargetChecked(bool checked);
     void setAllSameDateSizeEcs(EntryConflictStrategy ecs);
 
+    int checkedSources() const { return checkedSources_; };
+    int checkedTargets() const { return checkedTargets_; };
+
 signals:
     // 当单个项的CheckState发生改变时发出。
     void dataCheckStateToggled(const QModelIndex& idx, bool checked);
@@ -38,4 +41,6 @@ private:
     static EntryConflictStrategy getEcsByCheckState(Qt::CheckState source, Qt::CheckState target);
 
     LinkTasks& conflicts_;
+    int checkedSources_ = 0;
+    int checkedTargets_ = 0;
 };

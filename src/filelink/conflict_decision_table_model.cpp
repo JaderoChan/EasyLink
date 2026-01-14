@@ -99,6 +99,11 @@ bool ConflictDecisionTableModel::setData(const QModelIndex& idx, const QVariant&
         data(right, Qt::CheckStateRole).value<Qt::CheckState>());
     conflicts_[row].ecs = getEcsByCheckState(source, target);
 
+     if (col == 0)
+        checkedSources_ += source == Qt::Checked ? 1 : -1;
+    else
+        checkedTargets_ += source == Qt::Checked ? 1 : -1;
+
     emit dataCheckStateToggled(idx, value.toBool());
     emit dataChanged(left, right, {Qt::CheckStateRole});
 
@@ -115,6 +120,7 @@ void ConflictDecisionTableModel::setAllSourceChecked(bool checked)
         conflicts_[row].ecs = getEcsByCheckState(source, target);
     }
 
+    checkedSources_ = checked ? conflicts_.size() : 0;
     emit dataChanged(index(0, 0), index(rowCount() - 1, columnCount() - 1), {Qt::CheckStateRole});
 }
 
@@ -128,6 +134,7 @@ void ConflictDecisionTableModel::setAllTargetChecked(bool checked)
         conflicts_[row].ecs = getEcsByCheckState(source, target);
     }
 
+    checkedTargets_ = checked ? conflicts_.size() : 0;
     emit dataChanged(index(0, 0), index(rowCount() - 1, columnCount() - 1), {Qt::CheckStateRole});
 }
 

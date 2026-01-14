@@ -122,12 +122,10 @@ bool ConflictDecisionDialog::eventFilter(QObject* obj, QEvent* event)
                             case Qt::PartiallyChecked:
                                 ui.sourceHeaderCb->setCheckState(Qt::Checked);
                                 model_->setAllSourceChecked(true);
-                                checkedSources_ = conflicts_.size();
                                 break;
                             case Qt::Checked:
                                 ui.sourceHeaderCb->setCheckState(Qt::Unchecked);
                                 model_->setAllSourceChecked(false);
-                                checkedSources_ = 0;
                                 break;
                             default:
                                 break;
@@ -141,12 +139,10 @@ bool ConflictDecisionDialog::eventFilter(QObject* obj, QEvent* event)
                             case Qt::PartiallyChecked:
                                 ui.targetHeaderCb->setCheckState(Qt::Checked);
                                 model_->setAllTargetChecked(true);
-                                checkedTargets_ = conflicts_.size();
                                 break;
                             case Qt::Checked:
                                 ui.targetHeaderCb->setCheckState(Qt::Unchecked);
                                 model_->setAllTargetChecked(false);
-                                checkedTargets_ = 0;
                                 break;
                             default:
                                 break;
@@ -169,10 +165,10 @@ void ConflictDecisionDialog::onModelDataCheckStateToggled(const QModelIndex& idx
     {
         case 0:
         {
-            checkedSources_ += (checked ? 1 : -1);
-            if (checkedSources_ == 0)
+            int checked = model_->checkedSources();
+            if (checked == 0)
                 ui.sourceHeaderCb->setCheckState(Qt::Unchecked);
-            else if (checkedSources_ == conflicts_.size())
+            else if (checked == conflicts_.size())
                 ui.sourceHeaderCb->setCheckState(Qt::Checked);
             else
                 ui.sourceHeaderCb->setCheckState(Qt::PartiallyChecked);
@@ -180,10 +176,10 @@ void ConflictDecisionDialog::onModelDataCheckStateToggled(const QModelIndex& idx
         }
         case 1:
         {
-            checkedTargets_ += (checked ? 1 : -1);
-            if (checkedTargets_ == 0)
+            int checked = model_->checkedTargets();
+            if (checked == 0)
                 ui.targetHeaderCb->setCheckState(Qt::Unchecked);
-            else if (checkedTargets_ == conflicts_.size())
+            else if (checked == conflicts_.size())
                 ui.targetHeaderCb->setCheckState(Qt::Checked);
             else
                 ui.targetHeaderCb->setCheckState(Qt::PartiallyChecked);

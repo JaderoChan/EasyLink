@@ -27,8 +27,6 @@ private:
     ConflictDecisionTableModel* model_ = nullptr;
     QSortFilterProxyModel* proxyModel_ = nullptr;
     LinkTasks& conflicts_;
-    int checkedSources_ = 0;
-    int checkedTargets_ = 0;
     int sameDateSizeEntries_ = 0;
     bool isFiltered_ = false;
     bool sourceHeaderWgtPressed_ = false;
