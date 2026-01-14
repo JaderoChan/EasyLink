@@ -197,8 +197,13 @@ void ConflictDecisionDialog::onModelDataCheckStateToggled(const QModelIndex& idx
 void ConflictDecisionDialog::onSkipSameDateSizeCbToggled()
 {
     if (!isFiltered_)
+    {
         proxyModel_->setFilterFixedString("false");
+        model_->setAllSameDateSizeEcs(ECS_NONE);
+    }
     else
+    {
         proxyModel_->setFilterFixedString("");
+    }
     isFiltered_ = !isFiltered_;
 }

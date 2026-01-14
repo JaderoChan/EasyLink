@@ -131,6 +131,13 @@ void ConflictDecisionTableModel::setAllTargetChecked(bool checked)
     emit dataChanged(index(0, 0), index(rowCount() - 1, columnCount() - 1), {Qt::CheckStateRole});
 }
 
+void ConflictDecisionTableModel::setAllSameDateSizeEcs(EntryConflictStrategy ecs)
+{
+    for (int row = 0; row < conflicts_.size(); ++row)
+        conflicts_[row].ecs = ecs;
+    emit dataChanged(index(0, 0), index(rowCount() - 1, columnCount() - 1), {Qt::CheckStateRole});
+}
+
 EntryConflictStrategy ConflictDecisionTableModel::getEcsByCheckState(Qt::CheckState source, Qt::CheckState target)
 {
     if (source == Qt::Unchecked && target == Qt::Unchecked)

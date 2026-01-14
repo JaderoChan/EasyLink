@@ -28,6 +28,7 @@ public:
 
     void setAllSourceChecked(bool checked);
     void setAllTargetChecked(bool checked);
+    void setAllSameDateSizeEcs(EntryConflictStrategy ecs);
 
 signals:
     // 当单个项的CheckState发生改变时发出。
