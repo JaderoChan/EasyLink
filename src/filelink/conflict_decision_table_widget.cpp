@@ -200,5 +200,5 @@ void ConflictDecisionTableWidget::setupUi()
     layout->addWidget(headerWgt);
     layout->addWidget(&view_);
 
-    layout->setContentsMargins(24, 0, 24 - view_.verticalScrollBar()->width(), 0);
+    layout->setContentsMargins(24, 12, 24 - view_.verticalScrollBar()->width(), 0);
 }
