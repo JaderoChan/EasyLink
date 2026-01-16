@@ -42,7 +42,7 @@ void ConflictDecisionTableWidget::setSkipSameDateSize(bool skip)
         for (int row = 0; row < rows; ++row)
         {
             auto sourceRow = proxyModel_.mapToSource(proxyModel_.index(row, 0)).row();
-            model_.setEcs(sourceRow, ECS_NONE);
+            model_.setEcs(sourceRow, CES_NONE);
         }
         model_.endBatchSet();
 

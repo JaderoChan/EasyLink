@@ -121,7 +121,7 @@ void FileLinkWorker::run()
     }
 
     // 如果用户使用Skip策略并应用至所有冲突项，则只更新统计数据。
-    if (ecsApplyToAll_ && ecsOfAll == ECS_SKIP)
+    if (cesApplyToAll_ && cesOfAll == CES_SKIP)
     {
         stats_.processedEntries += stats_.conflicts;
         stats_.successfulEntries += stats_.conflicts;
@@ -147,10 +147,10 @@ void FileLinkWorker::setParameters(
     removeToTrash_ = removeToTrash;
 }
 
-void FileLinkWorker::setConflictsDecisionForAll(EntryConflictStrategy ecs)
+void FileLinkWorker::setConflictsDecisionForAll(ConflictingEntryStrategy ces)
 {
-    ecsOfAll = ecs;
-    ecsApplyToAll_ = true;
+    cesOfAll = ces;
+    cesApplyToAll_ = true;
     resume();
 }
 
@@ -204,12 +204,12 @@ void FileLinkWorker::addTask(LinkType linkType, const QFileInfo& source, const Q
             target.size()
         }
     };
-    tasks_.enqueue({linkType, currentEntryPair_, ECS_NONE});
+    tasks_.enqueue({linkType, currentEntryPair_, CES_NONE});
     stats_.totalEntries++;
     tryUpdateProgress();
 }
 
-bool FileLinkWorker::createLink(LinkType linkType, QFileInfo& source, QFileInfo& target, EntryConflictStrategy ecs)
+bool FileLinkWorker::createLink(LinkType linkType, QFileInfo& source, QFileInfo& target, ConflictingEntryStrategy ces)
 {
     source.refresh();
     target.refresh();
@@ -227,12 +227,12 @@ bool FileLinkWorker::createLink(LinkType linkType, QFileInfo& source, QFileInfo&
         }
         else if (target.isFile() || isWindowsSymlink(target))
         {
-            ecs = ecsApplyToAll_ ? ecsOfAll.load() : ecs;
-            switch (ecs)
+            ces = cesApplyToAll_ ? cesOfAll.load() : ces;
+            switch (ces)
             {
-                case ECS_NONE:
+                case CES_NONE:
                     return false;
-                case ECS_REPLACE:
+                case CES_REPLACE:
                     if (removeToTrash_)
                     {
                         if (!QFile::moveToTrash(target.absoluteFilePath()))
@@ -245,9 +245,9 @@ bool FileLinkWorker::createLink(LinkType linkType, QFileInfo& source, QFileInfo&
                     }
                     createLink(linkType, source, target);
                     break;
-                case ECS_SKIP:
+                case CES_SKIP:
                     break;
-                case ECS_KEEP:
+                case CES_KEEP:
                     generateNewPath(target);
                     createLink(linkType, source, target);
                     break;
@@ -282,7 +282,7 @@ LinkTasks FileLinkWorker::processTasks()
         {
             auto& source = task.entryPair.source.fileinfo;
             auto& target = task.entryPair.target.fileinfo;
-            bool isConflict = !createLink(task.linkType, source, target, task.ecs);
+            bool isConflict = !createLink(task.linkType, source, target, task.ces);
             if (isConflict)
             {
                 stats_.conflicts++;

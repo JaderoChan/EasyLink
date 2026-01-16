@@ -169,19 +169,19 @@ void ProgressWidget::onDetailsBtnPressed()
 void ProgressWidget::onReplaceAllBtnPressed()
 {
     pageToMainWidget();
-    emit allConflictsDecided(ECS_REPLACE);
+    emit allConflictsDecided(CES_REPLACE);
 }
 
 void ProgressWidget::onSkipAllBtnPressed()
 {
     pageToMainWidget();
-    emit allConflictsDecided(ECS_SKIP);
+    emit allConflictsDecided(CES_SKIP);
 }
 
 void ProgressWidget::onKeepAllBtnPressed()
 {
     pageToMainWidget();
-    emit allConflictsDecided(ECS_KEEP);
+    emit allConflictsDecided(CES_KEEP);
 }
 
 void ProgressWidget::onDecideAllBtnPressed()
@@ -193,14 +193,14 @@ void ProgressWidget::onDecideAllBtnPressed()
     {
         // 如果所有冲突项都使用None/Skip策略则直接发送“对所有冲突项采用Skip策略”信号，以进行优化。
         if (clearEcs(conflicts_))
-            emit allConflictsDecided(ECS_SKIP);
+            emit allConflictsDecided(CES_SKIP);
         else
             emit conflictsDecided(conflicts_);
     }
     else
     {
         // 默认对所有冲突项采用Skip策略。
-        emit allConflictsDecided(ECS_SKIP);
+        emit allConflictsDecided(CES_SKIP);
     }
 }
 
@@ -209,9 +209,9 @@ bool ProgressWidget::clearEcs(LinkTasks& tasks)
     int counter = 0;
     for (auto& task : tasks)
     {
-        if (task.ecs == ECS_NONE || task.ecs == ECS_SKIP)
+        if (task.ces == CES_NONE || task.ces == CES_SKIP)
         {
-            task.ecs = ECS_SKIP;
+            task.ces = CES_SKIP;
             counter++;
         }
     }
@@ -351,5 +351,5 @@ void ProgressWidget::updateCurrentEntryTypeText()
 
 void ProgressWidget::updateEcsWidgetTipText()
 {
-    ui.ecsTipText->setText(QString(EASYTR(CLSNAME ".Label.EcsTipText")).arg(stats_.conflicts));
+    ui.cesTipText->setText(QString(EASYTR(CLSNAME ".Label.EcsTipText")).arg(stats_.conflicts));
 }

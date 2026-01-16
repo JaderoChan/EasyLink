@@ -956,7 +956,7 @@ border-radius: 6px;</string>
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="ecsPage">
+     <widget class="QWidget" name="cesPage">
       <layout class="QVBoxLayout" name="verticalLayout_10">
        <property name="spacing">
         <number>0</number>
@@ -974,7 +974,7 @@ border-radius: 6px;</string>
         <number>0</number>
        </property>
        <item>
-        <widget class="QWidget" name="ecsWgt" native="true">
+        <widget class="QWidget" name="cesWgt" native="true">
          <layout class="QVBoxLayout" name="verticalLayout_7">
           <property name="leftMargin">
            <number>0</number>
@@ -1010,7 +1010,7 @@ border-radius: 6px;</string>
               <number>0</number>
              </property>
              <item>
-              <widget class="QLabel" name="ecsTipText">
+              <widget class="QLabel" name="cesTipText">
                <property name="text">
                 <string>The target contains - entries with the same name</string>
                </property>

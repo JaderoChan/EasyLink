@@ -16,17 +16,17 @@ QIcon ConflictDecisionTableModel::getFileIcon(const QFileInfo& fileinfo)
     QIcon icon;
 }
 
-EntryConflictStrategy ConflictDecisionTableModel::getEcsByCheckState(Qt::CheckState source, Qt::CheckState target)
+ConflictingEntryStrategy ConflictDecisionTableModel::getEcsByCheckState(Qt::CheckState source, Qt::CheckState target)
 {
     if (source == Qt::Unchecked && target == Qt::Unchecked)
-        return ECS_NONE;
+        return CES_NONE;
     else if (source == Qt::Checked && target == Qt::Unchecked)
-        return ECS_REPLACE;
+        return CES_REPLACE;
     else if (source == Qt::Unchecked && target == Qt::Checked)
-        return ECS_SKIP;
+        return CES_SKIP;
     else if (source == Qt::Checked && target == Qt::Checked)
-        return ECS_KEEP;
-    return ECS_NONE;
+        return CES_KEEP;
+    return CES_NONE;
 }
 
 int ConflictDecisionTableModel::rowCount(const QModelIndex& parent) const
@@ -56,12 +56,12 @@ QVariant ConflictDecisionTableModel::data(const QModelIndex& idx, int role) cons
             return entry.fileinfo.absoluteFilePath();
         case Qt::CheckStateRole:
         {
-            switch (conflict.ecs)
+            switch (conflict.ces)
             {
-                case ECS_NONE:      return Qt::Unchecked;
-                case ECS_REPLACE:   return col == 0 ? Qt::Checked : Qt::Unchecked;
-                case ECS_SKIP:      return col == 0 ? Qt::Unchecked : Qt::Checked;
-                case ECS_KEEP:      return Qt::Checked;
+                case CES_NONE:      return Qt::Unchecked;
+                case CES_REPLACE:   return col == 0 ? Qt::Checked : Qt::Unchecked;
+                case CES_SKIP:      return col == 0 ? Qt::Unchecked : Qt::Checked;
+                case CES_KEEP:      return Qt::Checked;
                 default:            break;
             }
             break;
@@ -108,7 +108,7 @@ bool ConflictDecisionTableModel::setData(const QModelIndex& idx, const QVariant&
     auto target = (col == 1 ?
         value.value<Qt::CheckState>() :
         data(right, Qt::CheckStateRole).value<Qt::CheckState>());
-    conflicts_[row].ecs = getEcsByCheckState(source, target);
+    conflicts_[row].ces = getEcsByCheckState(source, target);
 
     emit dataChanged(left, right, {Qt::CheckStateRole});
 
@@ -131,16 +131,16 @@ bool ConflictDecisionTableModel::setChecked(const QModelIndex& idx, bool checked
     auto target = (col == 1 ?
         boolToCheckState(checked) :
         data(index(row, 1), Qt::CheckStateRole).value<Qt::CheckState>());
-    conflicts_[row].ecs = getEcsByCheckState(source, target);
+    conflicts_[row].ces = getEcsByCheckState(source, target);
 
     return true;
 }
 
-bool ConflictDecisionTableModel::setEcs(int row, EntryConflictStrategy ecs)
+bool ConflictDecisionTableModel::setEcs(int row, ConflictingEntryStrategy ces)
 {
     if (row < 0 || row >= rowCount())
         return false;
-    conflicts_[row].ecs = ecs;
+    conflicts_[row].ces = ces;
     return true;
 }
 

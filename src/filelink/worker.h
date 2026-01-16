@@ -38,7 +38,7 @@ public:
     // - 必须在工作线程处于暂停状态时调用。
     // - 设置冲突策略并应用至全部项。
     // - 线程安全。
-    void setConflictsDecisionForAll(EntryConflictStrategy ecs);
+    void setConflictsDecisionForAll(ConflictingEntryStrategy ces);
     // - 必须在工作线程处于暂停状态时调用。
     // - 线程安全。
     void setConflictsDecision(const LinkTasks& tasks);
@@ -63,7 +63,7 @@ protected:
     void addTask(LinkType linkType, const QFileInfo& source, const QFileInfo& target);
     // - 仅当冲突处理策略是None且发生冲突时返回false，否则返回true。
     // - 传入的source/target可能发生改变。
-    bool createLink(LinkType linkType, QFileInfo& source, QFileInfo& target, EntryConflictStrategy ecs);
+    bool createLink(LinkType linkType, QFileInfo& source, QFileInfo& target, ConflictingEntryStrategy ces);
     // 处理链接任务，返回冲突项。
     LinkTasks processTasks();
     // 尝试发射进度更新信号。
@@ -96,8 +96,8 @@ private:
     std::condition_variable pausedCondition_;
     std::atomic<bool> paused_{false};
     std::atomic<bool> cancelled_{false};
-    std::atomic<bool> ecsApplyToAll_{false};
-    std::atomic<EntryConflictStrategy> ecsOfAll{ECS_NONE};
+    std::atomic<bool> cesApplyToAll_{false};
+    std::atomic<ConflictingEntryStrategy> cesOfAll{CES_NONE};
 
     bool removeToTrash_ = false;
 

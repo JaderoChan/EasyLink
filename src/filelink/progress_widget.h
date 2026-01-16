@@ -36,7 +36,7 @@ signals:
     void pauseTriggered();
     void resumeTriggered();
     void cancelTriggered();
-    void allConflictsDecided(EntryConflictStrategy ConflictPolicy);
+    void allConflictsDecided(ConflictingEntryStrategy ConflictPolicy);
     void conflictsDecided(LinkTasks tasks);
 
 protected:

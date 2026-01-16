@@ -17,7 +17,7 @@ public:
 
     // Non-thread-safe
     static QIcon getFileIcon(const QFileInfo& fileinfo);
-    static EntryConflictStrategy getEcsByCheckState(Qt::CheckState source, Qt::CheckState target);
+    static ConflictingEntryStrategy getEcsByCheckState(Qt::CheckState source, Qt::CheckState target);
 
     int rowCount(const QModelIndex& parent = QModelIndex()) const override;
     int columnCount(const QModelIndex& parent = QModelIndex()) const override;
@@ -28,7 +28,7 @@ public:
 
     // 下面两个函数不会发出dataChanged信号，需要在此前后调用beginReset()和endReset()。
     bool setChecked(const QModelIndex& idx, bool checked);
-    bool setEcs(int row, EntryConflictStrategy ecs);
+    bool setEcs(int row, ConflictingEntryStrategy ces);
 
     void beginBatchSet();
     void endBatchSet();

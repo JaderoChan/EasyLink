@@ -11,12 +11,12 @@ enum LinkType : char
 };
 
 // 冲突（目标已存在时）处理策略
-enum EntryConflictStrategy : char
+enum ConflictingEntryStrategy : char
 {
-    ECS_NONE,       // 无策略
-    ECS_REPLACE,    // 覆盖同名条目
-    ECS_SKIP,       // 跳过同名条目
-    ECS_KEEP        // 均保留（通过重命名）
+    CES_NONE,       // 无策略
+    CES_REPLACE,    // 覆盖同名条目
+    CES_SKIP,       // 跳过同名条目
+    CES_KEEP        // 均保留（通过重命名）
 };
 
 struct Entry
@@ -36,7 +36,7 @@ struct LinkTask
 {
     LinkType linkType;
     EntryPair entryPair;
-    EntryConflictStrategy ecs;
+    ConflictingEntryStrategy ces;
 };
 
 using LinkTasks = QQueue<LinkTask>;
