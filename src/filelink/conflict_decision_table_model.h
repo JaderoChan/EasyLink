@@ -6,8 +6,7 @@
 
 #include "types.h"
 
-#define URL_ROLE (Qt::UserRole + 1)
-#define SAME_DATE_SIZE_ROLE (Qt::UserRole + 2)
+#define SAME_DATE_SIZE_ROLE (Qt::UserRole + 1)
 
 class ConflictDecisionTableModel : public QAbstractTableModel
 {
@@ -18,6 +17,7 @@ public:
 
     // Non-thread-safe
     static QIcon getFileIcon(const QFileInfo& fileinfo);
+    static EntryConflictStrategy getEcsByCheckState(Qt::CheckState source, Qt::CheckState target);
 
     int rowCount(const QModelIndex& parent = QModelIndex()) const override;
     int columnCount(const QModelIndex& parent = QModelIndex()) const override;
@@ -26,20 +26,13 @@ public:
 
     bool setData(const QModelIndex& idx, const QVariant& value, int role = Qt::DisplayRole) override;
 
-    void setAllSourceChecked(bool checked);
-    void setAllTargetChecked(bool checked);
-    void setAllSameDateSizeEcs(EntryConflictStrategy ecs);
+    // 下面两个函数不会发出dataChanged信号，需要在此前后调用beginReset()和endReset()。
+    bool setChecked(const QModelIndex& idx, bool checked);
+    bool setEcs(int row, EntryConflictStrategy ecs);
 
-    int checkedSources() const { return checkedSources_; };
-    int checkedTargets() const { return checkedTargets_; };
-
-signals:
-    void checkedCountChanged();
+    void beginBatchSet();
+    void endBatchSet();
 
 private:
-    static EntryConflictStrategy getEcsByCheckState(Qt::CheckState source, Qt::CheckState target);
-
     LinkTasks& conflicts_;
-    int checkedSources_ = 0;
-    int checkedTargets_ = 0;
 };

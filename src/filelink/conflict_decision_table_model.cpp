@@ -16,6 +16,19 @@ QIcon ConflictDecisionTableModel::getFileIcon(const QFileInfo& fileinfo)
     QIcon icon;
 }
 
+EntryConflictStrategy ConflictDecisionTableModel::getEcsByCheckState(Qt::CheckState source, Qt::CheckState target)
+{
+    if (source == Qt::Unchecked && target == Qt::Unchecked)
+        return ECS_NONE;
+    else if (source == Qt::Checked && target == Qt::Unchecked)
+        return ECS_REPLACE;
+    else if (source == Qt::Unchecked && target == Qt::Checked)
+        return ECS_SKIP;
+    else if (source == Qt::Checked && target == Qt::Checked)
+        return ECS_KEEP;
+    return ECS_NONE;
+}
+
 int ConflictDecisionTableModel::rowCount(const QModelIndex& parent) const
 {
     return conflicts_.size();
@@ -30,7 +43,7 @@ QVariant ConflictDecisionTableModel::data(const QModelIndex& idx, int role) cons
 {
     int row = idx.row();
     int col = idx.column();
-    if (!idx.isValid() || row >= conflicts_.size() || col >= columnCount())
+    if (!idx.isValid() || row >= rowCount() || col >= columnCount())
         return QVariant();
 
     const auto& conflict = conflicts_[row];
@@ -55,8 +68,6 @@ QVariant ConflictDecisionTableModel::data(const QModelIndex& idx, int role) cons
         }
         case Qt::DecorationRole:
             return getFileIcon(entry.fileinfo);
-        case URL_ROLE:
-            return entry.fileinfo.absolutePath();
         case SAME_DATE_SIZE_ROLE:
             return (conflict.entryPair.source.size == conflict.entryPair.target.size) &&
                 (conflict.entryPair.source.lastModified == conflict.entryPair.target.lastModified);
@@ -71,7 +82,7 @@ Qt::ItemFlags ConflictDecisionTableModel::flags(const QModelIndex& idx) const
 {
     int row = idx.row();
     int col = idx.column();
-    if (!idx.isValid() || row >= conflicts_.size() || col >= columnCount())
+    if (!idx.isValid() || row >= rowCount() || col >= columnCount())
         return Qt::ItemFlags();
 
     Qt::ItemFlags flag = QAbstractTableModel::flags(idx);
@@ -83,7 +94,7 @@ bool ConflictDecisionTableModel::setData(const QModelIndex& idx, const QVariant&
 {
     int row = idx.row();
     int col = idx.column();
-    if (!idx.isValid() || row >= conflicts_.size() || col >= columnCount())
+    if (!idx.isValid() || row >= rowCount() || col >= columnCount())
         return false;
 
     if (role != Qt::CheckStateRole)
@@ -99,70 +110,46 @@ bool ConflictDecisionTableModel::setData(const QModelIndex& idx, const QVariant&
         data(right, Qt::CheckStateRole).value<Qt::CheckState>());
     conflicts_[row].ecs = getEcsByCheckState(source, target);
 
-     if (col == 0)
-        checkedSources_ += source == Qt::Checked ? 1 : -1;
-    else
-        checkedTargets_ += source == Qt::Checked ? 1 : -1;
-
-    emit checkedCountChanged();
     emit dataChanged(left, right, {Qt::CheckStateRole});
 
     return true;
 }
 
-void ConflictDecisionTableModel::setAllSourceChecked(bool checked)
+bool ConflictDecisionTableModel::setChecked(const QModelIndex& idx, bool checked)
 {
-    for (int row = 0; row < conflicts_.size(); ++row)
-    {
-        auto& conflict = conflicts_[row];
-        Qt::CheckState source = checked ? Qt::Checked : Qt::Unchecked;
-        auto target = data(index(row, 1), Qt::CheckStateRole).value<Qt::CheckState>();
-        conflicts_[row].ecs = getEcsByCheckState(source, target);
-    }
+    int row = idx.row();
+    int col = idx.column();
+    if (!idx.isValid() || row >= rowCount() || col >= columnCount())
+        return false;
 
-    int newCheckedSources = checked ? conflicts_.size() : 0;
-    if (checkedSources_ != newCheckedSources)
-        emit checkedCountChanged();
-    checkedSources_ = newCheckedSources;
+    static auto boolToCheckState = [](bool checked) -> Qt::CheckState
+    { return checked ? Qt::Checked : Qt::Unchecked; };
 
-    emit dataChanged(index(0, 0), index(rowCount() - 1, columnCount() - 1), {Qt::CheckStateRole});
+    auto source = (col == 0 ?
+        boolToCheckState(checked) :
+        data(index(row, 0), Qt::CheckStateRole).value<Qt::CheckState>());
+    auto target = (col == 1 ?
+        boolToCheckState(checked) :
+        data(index(row, 1), Qt::CheckStateRole).value<Qt::CheckState>());
+    conflicts_[row].ecs = getEcsByCheckState(source, target);
+
+    return true;
 }
 
-void ConflictDecisionTableModel::setAllTargetChecked(bool checked)
+bool ConflictDecisionTableModel::setEcs(int row, EntryConflictStrategy ecs)
 {
-    for (int row = 0; row < conflicts_.size(); ++row)
-    {
-        auto& conflict = conflicts_[row];
-        Qt::CheckState target = checked ? Qt::Checked : Qt::Unchecked;
-        auto source = data(index(row, 0), Qt::CheckStateRole).value<Qt::CheckState>();
-        conflicts_[row].ecs = getEcsByCheckState(source, target);
-    }
-
-    int newCheckedTargets = checked ? conflicts_.size() : 0;
-    if (checkedTargets_ != newCheckedTargets)
-        emit checkedCountChanged();
-    checkedTargets_ = newCheckedTargets;
-
-    emit dataChanged(index(0, 0), index(rowCount() - 1, columnCount() - 1), {Qt::CheckStateRole});
+    if (row < 0 || row >= rowCount())
+        return false;
+    conflicts_[row].ecs = ecs;
+    return true;
 }
 
-// todo：统计checked数量，如果发生改变则发射checkedCountChanged信号。
-void ConflictDecisionTableModel::setAllSameDateSizeEcs(EntryConflictStrategy ecs)
+void ConflictDecisionTableModel::beginBatchSet()
 {
-    for (int row = 0; row < conflicts_.size(); ++row)
-        conflicts_[row].ecs = ecs;
-    emit dataChanged(index(0, 0), index(rowCount() - 1, columnCount() - 1), {Qt::CheckStateRole});
+    beginResetModel();
 }
 
-EntryConflictStrategy ConflictDecisionTableModel::getEcsByCheckState(Qt::CheckState source, Qt::CheckState target)
+void ConflictDecisionTableModel::endBatchSet()
 {
-    if (source == Qt::Unchecked && target == Qt::Unchecked)
-        return ECS_NONE;
-    else if (source == Qt::Checked && target == Qt::Unchecked)
-        return ECS_REPLACE;
-    else if (source == Qt::Unchecked && target == Qt::Checked)
-        return ECS_SKIP;
-    else if (source == Qt::Checked && target == Qt::Checked)
-        return ECS_KEEP;
-    return ECS_NONE;
+    endResetModel();
 }

@@ -9,5 +9,6 @@
     <file>icons/replace.ico</file>
     <file>icons/play.ico</file>
     <file>icons/skip.ico</file>
+    <file>stylesheets/table_view.qss</file>
   </qresource>
 </RCC>
