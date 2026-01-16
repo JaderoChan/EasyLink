@@ -45,9 +45,6 @@ void ConflictDecisionTableWidget::setSkipSameDateSize(bool skip)
             model_.setEcs(sourceRow, CES_NONE);
         }
         model_.endBatchSet();
-
-        checkedSources_ = 0;
-        checkedTargets_ = 0;
     }
 
     proxyModel_.setFilterFixedString(skip ? "false" : "");

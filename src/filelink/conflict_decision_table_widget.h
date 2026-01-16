@@ -38,7 +38,4 @@ private:
     QTableView view_;
     ConflictDecisionTableModel model_;
     QSortFilterProxyModel proxyModel_;
-
-    int checkedSources_ = 0;
-    int checkedTargets_ = 0;
 };
