@@ -122,14 +122,9 @@ void FileLinkWorker::run()
 
     // 如果用户使用Skip策略并应用至所有冲突项，则只更新统计数据。
     if (cesApplyToAll_ && cesOfAll == CES_SKIP)
-    {
         stats_.processedEntries += stats_.conflicts;
-        stats_.successfulEntries += stats_.conflicts;
-    }
     else
-    {
         processTasks();
-    }
 
     tryUpdateProgress(true);
     emit finished();
@@ -282,7 +277,6 @@ LinkTasks FileLinkWorker::processTasks()
             else
             {
                 stats_.processedEntries++;
-                stats_.successfulEntries++;
             }
 
             tryUpdateProgress();

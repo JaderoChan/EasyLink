@@ -55,7 +55,6 @@ struct LinkStats
 {
     int totalEntries = 0;
     int processedEntries = 0;
-    int successfulEntries = 0;
     int failedEntries = 0;
     int conflicts = 0;
 
