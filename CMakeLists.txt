@@ -24,4 +24,6 @@ FetchContent_MakeAvailable(easy_translate)
 include(GNUInstallDirs)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin/${CMAKE_BUILD_TYPE})
 
+set(APP_UUID 53c90f08-cf31-4998-83f0-2eeb408406f9)
+
 add_subdirectory(src)

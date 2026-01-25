@@ -1,5 +1,4 @@
 #include <qapplication.h>
-#include <qdir.h>
 #include <qlockfile.h>
 
 #include <easy_translate.hpp>
@@ -10,7 +9,7 @@
 
 int main(int argc, char* argv[])
 {
-    QLockFile lock(QDir::temp().absoluteFilePath(APP_LOCK_FILENAME));
+    QLockFile lock(APP_LOCK_FILENAME);
     if (lock.isLocked() || !lock.tryLock(500))
         return 0;
 
@@ -19,6 +18,9 @@ int main(int argc, char* argv[])
 
     if (!setLanguage(APPLANG_ZH))
         qDebug() << "Failed set the language";
+
+    FileLinkManager m;
+    m.createLinks(LT_HARDLINK, {"E:/05_Data"}, "E:/06_TMP/Test");
 
     int ret = a.exec();
 
