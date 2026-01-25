@@ -45,8 +45,8 @@ struct EntryPair
 struct LinkTask
 {
     LinkType linkType;
-    EntryPair entryPair;
     ConflictingEntryStrategy ces;
+    EntryPair entryPair;
 };
 
 using LinkTasks = QQueue<LinkTask>;
