@@ -7,17 +7,27 @@
 
 #include "config.h"
 
-static QString languageStringId(AppLanguage lang)
+static QString languageStringId(Language lang)
 {
     switch (lang)
     {
-        case APPLANG_EN:    return "EN";
-        case APPLANG_ZH:    return "ZH";
-        default:            return "";
+        case LANG_EN:   return "EN";
+        case LANG_ZH:   return "ZH";
+        default:        return "";
     }
 }
 
-bool setLanguage(AppLanguage lang)
+Language currentSystemLang()
+{
+    switch (QLocale::system().language())
+    {
+        case QLocale::Language::English:    return LANG_EN;
+        case QLocale::Language::Chinese:    return LANG_ZH;
+        default:                            return LANG_EN;
+    }
+}
+
+bool setLanguage(Language lang)
 {
     easytr::setLanguages(APP_LANG_LIST_FILENAME);
     if (easytr::languages().empty())

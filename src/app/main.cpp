@@ -5,7 +5,8 @@
 
 #include "config.h"
 #include "language.h"
-#include "filelink/manager.h"
+#include "settings.h"
+#include "system_tray_icon.h"
 
 int main(int argc, char* argv[])
 {
@@ -14,13 +15,16 @@ int main(int argc, char* argv[])
         return 0;
 
     QApplication a(argc, argv);
-    // a.setQuitOnLastWindowClosed(false);
+    a.setOrganizationName(APP_ORGANIZATION);
+    a.setApplicationName(APP_TITLE);
+    a.setQuitOnLastWindowClosed(false);
 
-    if (!setLanguage(APPLANG_ZH))
+    auto settings = readSettings();
+    if (!setLanguage(settings.language));
         qDebug() << "Failed set the language";
 
-    FileLinkManager m(LT_HARDLINK, {"E:/05_Data"}, "E:/06_TMP/Test");
-    m.start();
+    SystemTray st;
+    st.show();
 
     int ret = a.exec();
 

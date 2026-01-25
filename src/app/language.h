@@ -2,10 +2,13 @@
 
 #include <qstring.h>
 
-enum AppLanguage
+enum Language
 {
-    APPLANG_EN,
-    APPLANG_ZH
+    LANG_EN,
+    LANG_ZH
 };
 
-bool setLanguage(AppLanguage lang);
+// 如果应用程序不支持当前系统语言则返回`LANG_EN`。
+Language currentSystemLang();
+
+bool setLanguage(Language lang);
