@@ -1,14 +1,17 @@
 #pragma once
 
-#include <qevent.h>
 #include <qaction.h>
 #include <qmenu.h>
 #include <qsystemtrayicon.h>
 
 class SystemTrayIcon : public QSystemTrayIcon
 {
+    Q_OBJECT
+
 public:
     explicit SystemTrayIcon(QObject* parent = nullptr);
+
+    void updateText();
 
 signals:
     void settingsActionTriggered();
@@ -16,9 +19,6 @@ signals:
     void exitActionTriggered();
 
 protected:
-    virtual void updateText();
-    bool eventFilter(QObject* obj, QEvent* event) override;
-
     void onActivated(QSystemTrayIcon::ActivationReason reason);
 
 private:

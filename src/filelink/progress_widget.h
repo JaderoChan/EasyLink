@@ -31,7 +31,8 @@ public:
 
     void onWorkFinished();
 
-    void laterShow(int ms);
+    void showAndActivate();
+    void laterShowAndActivate(int ms);
 
 signals:
     void pauseTriggered();

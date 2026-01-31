@@ -15,6 +15,9 @@
     <stylestrategy>PreferAntialias</stylestrategy>
    </font>
   </property>
+  <property name="focusPolicy">
+   <enum>Qt::ClickFocus</enum>
+  </property>
   <property name="windowTitle">
    <string>ConflictDecisionDialog</string>
   </property>
@@ -36,6 +39,9 @@
    </property>
    <item>
     <widget class="QWidget" name="widget" native="true">
+     <property name="focusPolicy">
+      <enum>Qt::ClickFocus</enum>
+     </property>
      <layout class="QVBoxLayout" name="verticalLayout">
       <property name="spacing">
        <number>2</number>
@@ -61,6 +67,9 @@
           <stylestrategy>PreferAntialias</stylestrategy>
          </font>
         </property>
+        <property name="focusPolicy">
+         <enum>Qt::ClickFocus</enum>
+        </property>
         <property name="styleSheet">
          <string notr="true">color: rgb(37,122,189);</string>
         </property>
@@ -71,6 +80,9 @@
       </item>
       <item>
        <widget class="QLabel" name="headerText2">
+        <property name="focusPolicy">
+         <enum>Qt::ClickFocus</enum>
+        </property>
         <property name="text">
          <string>If you select two files, a number will be added to the name of the copied file.</string>
         </property>
@@ -81,6 +93,9 @@
    </item>
    <item>
     <widget class="Line" name="line_3">
+     <property name="focusPolicy">
+      <enum>Qt::ClickFocus</enum>
+     </property>
      <property name="styleSheet">
       <string notr="true">color: rgb(204, 204, 204);</string>
      </property>
@@ -108,6 +123,9 @@
        <stylestrategy>PreferAntialias</stylestrategy>
       </font>
      </property>
+     <property name="focusPolicy">
+      <enum>Qt::ClickFocus</enum>
+     </property>
      <layout class="QHBoxLayout" name="horizontalLayout_5">
       <property name="spacing">
        <number>0</number>
@@ -129,6 +147,9 @@
    </item>
    <item>
     <widget class="Line" name="line_2">
+     <property name="focusPolicy">
+      <enum>Qt::ClickFocus</enum>
+     </property>
      <property name="styleSheet">
       <string notr="true">color: rgb(204, 204, 204);</string>
      </property>
@@ -145,6 +166,9 @@
    </item>
    <item>
     <widget class="QWidget" name="widget_3" native="true">
+     <property name="focusPolicy">
+      <enum>Qt::ClickFocus</enum>
+     </property>
      <layout class="QHBoxLayout" name="horizontalLayout">
       <property name="leftMargin">
        <number>12</number>

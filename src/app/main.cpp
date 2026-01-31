@@ -5,10 +5,7 @@
 #include <easy_translate.hpp>
 
 #include "config.h"
-#include "language.h"
-#include "settings.h"
-#include "system_tray_icon.h"
-#include "auto_run_on_startup.h"
+#include "app_manager.h"
 
 int main(int argc, char* argv[])
 {
@@ -19,21 +16,10 @@ int main(int argc, char* argv[])
     QApplication a(argc, argv);
     a.setOrganizationName(APP_ORGANIZATION);
     a.setApplicationName(APP_TITLE);
+    a.setWindowIcon(QIcon(":/icons/app.ico"));
     a.setQuitOnLastWindowClosed(false);
 
-    auto settings = loadSettings();
-    if (!setLanguage(settings.language));
-        qDebug() << QString("Failed to set language to %1").arg(languageStringId(settings.language));
-
-    if (settings.autoRunOnStartUp != isAutoRunOnStartUp())
-    {
-        if (!setAutoRunOnStartUp(settings.autoRunOnStartUp))
-            qDebug() << QString("Failed to %1 auto run on start up").arg(settings.autoRunOnStartUp ? "set" : "unset");
-    }
-
-    SystemTrayIcon sti;
-    sti.show();
-    a.installEventFilter(&sti);
+    AppManager mgr;
 
     int ret = a.exec();
 

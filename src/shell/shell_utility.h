@@ -1,7 +1,5 @@
 #pragma once
 
-#include <string>
+#include <qstring>
 
-#include <windows.h>
-
-std::wstring getFocusedExplorerWindowDirectory();
+QString getFocusedExplorerWindowDirectory();

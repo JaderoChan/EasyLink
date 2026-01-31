@@ -15,6 +15,9 @@
     <stylestrategy>PreferAntialias</stylestrategy>
    </font>
   </property>
+  <property name="focusPolicy">
+   <enum>Qt::ClickFocus</enum>
+  </property>
   <property name="windowTitle">
    <string>ErrorLogDialog</string>
   </property>

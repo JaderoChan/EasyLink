@@ -1,6 +1,7 @@
 #include "keycombination_inputer.h"
 
 KeyCombinationInputer::KeyCombinationInputer(QWidget* parent)
+    : QLineEdit(parent)
 {
     // 只接受点击获取焦点。
     setFocusPolicy(Qt::FocusPolicy::ClickFocus);

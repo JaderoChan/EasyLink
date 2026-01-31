@@ -25,15 +25,27 @@ target_link_libraries(
     easy_translate::easy_translate
 )
 
+set(APP_ICON ${CMAKE_CURRENT_SOURCE_DIR}/app/icons/app.ico)
+if(WIN32)
+    set(RC_FILE ${CMAKE_CURRENT_BINARY_DIR}/app.rc)
+    set(RC_CONTENT "APP_ICON ICON \"${APP_ICON}\"")
+    file(WRITE ${RC_FILE} ${RC_CONTENT})
+    target_sources(${PROJECT_NAME} PRIVATE ${RC_FILE})
+endif()
+
 set_target_properties(
     ${PROJECT_NAME} PROPERTIES
     AUTOMOC ON
     AUTOUIC ON
     AUTORCC ON
-    # WIN32_EXECUTABLE ON
+    WIN32_EXECUTABLE ON
 )
 
-option(UPDATE_TRANSLATIONS_FILES ON)
+if(MSVC)
+    target_compile_options(${PROJECT_NAME} PRIVATE /Zc:__cplusplus /permissive-)
+endif()
+
+option(UPDATE_TRANSLATIONS_FILES OFF)
 
 target_compile_definitions(
     ${PROJECT_NAME} PRIVATE

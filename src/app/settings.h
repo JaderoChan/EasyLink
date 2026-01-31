@@ -1,7 +1,6 @@
 #pragma once
 
 #include <qstring.h>
-#include <qobject.h>
 
 #include <global_hotkey/key_combination.hpp>
 
@@ -10,11 +9,11 @@
 
 struct Settings
 {
-    bool autoRunOnStartUp = false;
+    bool autoRunOnStartUp;
     Language language;
     LinkConfig linkConfig;
-    gbhk::KeyCombination symlinkHotkey  = "Ctrl+S";
-    gbhk::KeyCombination hardlinkHotkey = "Ctrl+H";
+    gbhk::KeyCombination symlinkHotkey;
+    gbhk::KeyCombination hardlinkHotkey;
 };
 
 Settings loadSettings();

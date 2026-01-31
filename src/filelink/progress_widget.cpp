@@ -91,6 +91,7 @@ void ProgressWidget::appendErrorLog(LinkType linkType, const EntryPair& entryPai
 void ProgressWidget::decideConflicts(const LinkTasks& conflicts)
 {
     conflicts_ = conflicts;
+    showAndActivate();
     pageToEcsWidget();
 }
 
@@ -110,11 +111,18 @@ void ProgressWidget::onWorkFinished()
     updateSpeedRemainingTimeDisplay();
 }
 
-void ProgressWidget::laterShow(int ms)
+void ProgressWidget::showAndActivate()
+{
+    show();
+    activateWindow();
+    raise();
+}
+
+void ProgressWidget::laterShowAndActivate(int ms)
 {
     auto timer = new QTimer(this);
-    timer->setInterval(ms);
-    connect(timer, &QTimer::timeout, this, &QDialog::show);
+    timer->start(ms);
+    connect(timer, &QTimer::timeout, this, &ProgressWidget::showAndActivate);
     connect(timer, &QTimer::timeout, timer, &QObject::deleteLater);
 }
 
@@ -293,9 +301,13 @@ void ProgressWidget::updateRemainingEntriesDisplay()
 void ProgressWidget::updateFailedCountDisplay()
 {
     ui.failedEntriesValue->setText(QString::number(stats_.failedEntries));
-    // 如果失败项数量不为0则启用errorWgt。
+    // 如果失败项数量不为0则启用errorWgt，并且立即显示。
     if (stats_.failedEntries > 0 && !ui.errorWgt->isEnabled())
+    {
         ui.errorWgt->setEnabled(true);
+        if (keepWhenErrorOccurred_)
+            showAndActivate();
+    }
 }
 
 void ProgressWidget::pageToMainWidget()

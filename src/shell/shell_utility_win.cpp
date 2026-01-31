@@ -1,12 +1,14 @@
 #include "shell_utility.h"
 
 #include <stdexcept>
+#include <string>
 
+#include <windows.h>
 #include <psapi.h>
 #include <shobjidl.h>
 #include <shlobj.h>
 
-std::wstring getFocusedExplorerWindowDirectory()
+QString getFocusedExplorerWindowDirectory()
 {
     constexpr const WCHAR* EXPLORER_CLASS_NAME_1    = L"ExploreWClass";
     constexpr const WCHAR* EXPLORER_CLASS_NAME_2    = L"CabinetWClass";
@@ -34,7 +36,7 @@ std::wstring getFocusedExplorerWindowDirectory()
         wchar_t path[MAX_PATH] = {0};
         if (!SUCCEEDED(SHGetFolderPathW(NULL, CSIDL_DESKTOP, NULL, SHGFP_TYPE_CURRENT, path)))
             throw std::runtime_error("Failed to SHGetFolderPath()");
-        return std::wstring(path);
+        return QString::fromStdWString(path);
     }
 
     IShellWindows* psw = nullptr;
@@ -191,6 +193,6 @@ std::wstring getFocusedExplorerWindowDirectory()
     CoUninitialize();
 
     if (path)
-        return std::wstring(path);
+        return QString::fromStdWString(path);
     throw std::runtime_error("Failed to get valid explorer window");
 }

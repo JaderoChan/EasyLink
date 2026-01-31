@@ -1,9 +1,9 @@
-#include "manager.h"
+#include "controller.h"
 
 #include <qdir.h>
 #include <qfileinfo.h>
 
-FileLinkManager::FileLinkManager(
+FileLinkController::FileLinkController(
     LinkType linkType,
     const QStringList& sourcePaths,
     const QString& targetDir,
@@ -35,26 +35,30 @@ FileLinkManager::FileLinkManager(
     connect(progress_, &ProgressWidget::conflictsDecided, worker_, &FileLinkWorker::setConflictsDecision, Qt::DirectConnection);
     connect(progress_, &ProgressWidget::allConflictsDecided, worker_, &FileLinkWorker::setConflictsDecisionForAll, Qt::DirectConnection);
 
-    connect(this, &FileLinkManager::operate, worker_, &FileLinkWorker::run);
-    connect(this, &FileLinkManager::cancel, worker_, &FileLinkWorker::cancel, Qt::DirectConnection);
-    connect(&workerThread_, &QThread::finished, worker_, &QObject::deleteLater);
+    connect(this, &FileLinkController::operate, worker_, &FileLinkWorker::run);
+    connect(&workerThread_, &QThread::finished, this, &QObject::deleteLater);
 }
 
-FileLinkManager::~FileLinkManager()
+FileLinkController::~FileLinkController()
 {
-    emit cancel();
-    workerThread_.quit();
-    workerThread_.wait();
+    stop();
+    if (worker_)
+        delete worker_;
 }
 
-void FileLinkManager::start()
+void FileLinkController::start()
 {
     if (worker_ && progress_)
     {
-        progress_->show();    // for dev
-        // progress_->laterShow(200);
+        // progress_->showAndActivate();    // for dev
+        progress_->laterShowAndActivate(200);
         workerThread_.start();
-
         emit operate();
     }
+}
+
+void FileLinkController::stop()
+{
+    if (worker_)
+        worker_->cancel();
 }

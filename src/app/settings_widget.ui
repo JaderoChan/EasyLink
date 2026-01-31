@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>SettingsDialog</class>
- <widget class="QDialog" name="SettingsDialog">
+ <class>SettingsWidget</class>
+ <widget class="QWidget" name="SettingsWidget">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>320</width>
-    <height>250</height>
+    <width>340</width>
+    <height>241</height>
    </rect>
   </property>
   <property name="font">
@@ -19,7 +19,7 @@
    <enum>Qt::ClickFocus</enum>
   </property>
   <property name="windowTitle">
-   <string>SettingsDialog</string>
+   <string>SettingsWidget</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_3">
    <item>
@@ -169,7 +169,20 @@
           </spacer>
          </item>
          <item>
-          <widget class="KeyCombinationInputer" name="symlinkHotkeyInputer"/>
+          <widget class="KeyCombinationInputer" name="symlinkHotkeyInputer">
+           <property name="minimumSize">
+            <size>
+             <width>140</width>
+             <height>0</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>140</width>
+             <height>16777215</height>
+            </size>
+           </property>
+          </widget>
          </item>
         </layout>
        </widget>
@@ -216,7 +229,20 @@
           </spacer>
          </item>
          <item>
-          <widget class="KeyCombinationInputer" name="hardlinkHotkeyInputer"/>
+          <widget class="KeyCombinationInputer" name="hardlinkHotkeyInputer">
+           <property name="minimumSize">
+            <size>
+             <width>140</width>
+             <height>0</height>
+            </size>
+           </property>
+           <property name="maximumSize">
+            <size>
+             <width>140</width>
+             <height>16777215</height>
+            </size>
+           </property>
+          </widget>
          </item>
         </layout>
        </widget>
@@ -230,7 +256,7 @@
   <customwidget>
    <class>KeyCombinationInputer</class>
    <extends>QLineEdit</extends>
-   <header>keycombination_inputer.h</header>
+   <header>app/keycombination_inputer.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

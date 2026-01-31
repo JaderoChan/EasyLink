@@ -27,6 +27,9 @@
     <stylestrategy>PreferAntialias</stylestrategy>
    </font>
   </property>
+  <property name="focusPolicy">
+   <enum>Qt::ClickFocus</enum>
+  </property>
   <property name="windowTitle">
    <string>ProgressWidget</string>
   </property>
@@ -45,6 +48,16 @@
    </property>
    <item>
     <widget class="QWidget" name="headerWgt" native="true">
+     <property name="font">
+      <font>
+       <pointsize>11</pointsize>
+       <bold>true</bold>
+       <stylestrategy>PreferAntialias</stylestrategy>
+      </font>
+     </property>
+     <property name="focusPolicy">
+      <enum>Qt::ClickFocus</enum>
+     </property>
      <layout class="QHBoxLayout" name="horizontalLayout">
       <property name="leftMargin">
        <number>24</number>
@@ -60,12 +73,8 @@
       </property>
       <item>
        <widget class="QWidget" name="widget_11" native="true">
-        <property name="font">
-         <font>
-          <pointsize>11</pointsize>
-          <bold>true</bold>
-          <stylestrategy>PreferAntialias</stylestrategy>
-         </font>
+        <property name="focusPolicy">
+         <enum>Qt::ClickFocus</enum>
         </property>
         <layout class="QHBoxLayout" name="horizontalLayout_2">
          <property name="leftMargin">
@@ -82,12 +91,8 @@
          </property>
          <item>
           <widget class="QLabel" name="headerText1">
-           <property name="font">
-            <font>
-             <pointsize>11</pointsize>
-             <bold>true</bold>
-             <stylestrategy>PreferAntialias</stylestrategy>
-            </font>
+           <property name="focusPolicy">
+            <enum>Qt::ClickFocus</enum>
            </property>
            <property name="text">
             <string>Symlink/Hardlink - entries from</string>
@@ -105,6 +110,9 @@
              <height>16777215</height>
             </size>
            </property>
+           <property name="focusPolicy">
+            <enum>Qt::ClickFocus</enum>
+           </property>
            <property name="text">
             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;C:&quot;&gt;&lt;span style=&quot;color: rgba(0, 100, 180, 216);text-decoration:none;&quot;&gt;source&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
            </property>
@@ -118,6 +126,9 @@
          </item>
          <item>
           <widget class="QLabel" name="headerText2">
+           <property name="focusPolicy">
+            <enum>Qt::ClickFocus</enum>
+           </property>
            <property name="text">
             <string>to</string>
            </property>
@@ -133,6 +144,9 @@
              <width>160</width>
              <height>16777215</height>
             </size>
+           </property>
+           <property name="focusPolicy">
+            <enum>Qt::ClickFocus</enum>
            </property>
            <property name="text">
             <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;a href=&quot;C:&quot;&gt;&lt;span style=&quot;color: rgba(0, 100, 180, 216);text-decoration:none;&quot;&gt;source&lt;/span&gt;&lt;/a&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
@@ -166,6 +180,9 @@
    </item>
    <item>
     <widget class="Line" name="line_5">
+     <property name="focusPolicy">
+      <enum>Qt::ClickFocus</enum>
+     </property>
      <property name="styleSheet">
       <string notr="true">color: rgb(204, 204, 204);</string>
      </property>
@@ -182,10 +199,16 @@
    </item>
    <item>
     <widget class="QStackedWidget" name="stackedWidget">
+     <property name="focusPolicy">
+      <enum>Qt::ClickFocus</enum>
+     </property>
      <property name="currentIndex">
       <number>0</number>
      </property>
      <widget class="QWidget" name="mainPage">
+      <property name="focusPolicy">
+       <enum>Qt::ClickFocus</enum>
+      </property>
       <layout class="QVBoxLayout" name="verticalLayout_9">
        <property name="spacing">
         <number>0</number>
@@ -204,6 +227,9 @@
        </property>
        <item>
         <widget class="QWidget" name="progressWgt" native="true">
+         <property name="focusPolicy">
+          <enum>Qt::ClickFocus</enum>
+         </property>
          <layout class="QVBoxLayout" name="verticalLayout">
           <property name="spacing">
            <number>2</number>
@@ -222,6 +248,9 @@
           </property>
           <item>
            <widget class="QWidget" name="widget_3" native="true">
+            <property name="focusPolicy">
+             <enum>Qt::ClickFocus</enum>
+            </property>
             <layout class="QHBoxLayout" name="horizontalLayout_6">
              <property name="leftMargin">
               <number>0</number>
@@ -249,18 +278,8 @@
                  <height>45</height>
                 </size>
                </property>
-               <property name="styleSheet">
-                <string notr="true">QProgressBar {
-	background: transparent;
-	border: 2px solid rgb(128,128,128);
-	border-radius: 8px;
-	color: rgb(0,0,0);
-}
-
-QProgressBar::chunk {
-	background: rgb(48,134,200);
-	border-radius: 6px;
-}</string>
+               <property name="focusPolicy">
+                <enum>Qt::ClickFocus</enum>
                </property>
                <property name="value">
                 <number>60</number>
@@ -284,6 +303,9 @@ QProgressBar::chunk {
               <verstretch>0</verstretch>
              </sizepolicy>
             </property>
+            <property name="focusPolicy">
+             <enum>Qt::ClickFocus</enum>
+            </property>
             <layout class="QHBoxLayout" name="horizontalLayout_3">
              <property name="leftMargin">
               <number>0</number>
@@ -299,6 +321,9 @@ QProgressBar::chunk {
              </property>
              <item>
               <widget class="QWidget" name="widget_10" native="true">
+               <property name="focusPolicy">
+                <enum>Qt::ClickFocus</enum>
+               </property>
                <layout class="QHBoxLayout" name="horizontalLayout_4">
                 <property name="spacing">
                  <number>2</number>
@@ -317,6 +342,9 @@ QProgressBar::chunk {
                 </property>
                 <item>
                  <widget class="QLabel" name="speedText">
+                  <property name="focusPolicy">
+                   <enum>Qt::ClickFocus</enum>
+                  </property>
                   <property name="text">
                    <string>Speed: </string>
                   </property>
@@ -327,6 +355,9 @@ QProgressBar::chunk {
                 </item>
                 <item>
                  <widget class="QLabel" name="speedValue">
+                  <property name="focusPolicy">
+                   <enum>Qt::ClickFocus</enum>
+                  </property>
                   <property name="text">
                    <string>-</string>
                   </property>
@@ -337,6 +368,9 @@ QProgressBar::chunk {
                 </item>
                 <item>
                  <widget class="QLabel" name="speedUnitText">
+                  <property name="focusPolicy">
+                   <enum>Qt::ClickFocus</enum>
+                  </property>
                   <property name="text">
                    <string>entries/s</string>
                   </property>
@@ -366,6 +400,9 @@ QProgressBar::chunk {
              </item>
              <item>
               <widget class="QWidget" name="widget_9" native="true">
+               <property name="focusPolicy">
+                <enum>Qt::ClickFocus</enum>
+               </property>
                <layout class="QHBoxLayout" name="horizontalLayout_5">
                 <property name="leftMargin">
                  <number>0</number>
@@ -495,6 +532,9 @@ QPushButton:pressed
           </item>
           <item>
            <widget class="QWidget" name="widget_4" native="true">
+            <property name="focusPolicy">
+             <enum>Qt::ClickFocus</enum>
+            </property>
             <layout class="QVBoxLayout" name="verticalLayout_3">
              <property name="spacing">
               <number>0</number>
@@ -513,6 +553,9 @@ QPushButton:pressed
              </property>
              <item>
               <widget class="QWidget" name="widget_5" native="true">
+               <property name="focusPolicy">
+                <enum>Qt::ClickFocus</enum>
+               </property>
                <layout class="QHBoxLayout" name="horizontalLayout_7">
                 <property name="leftMargin">
                  <number>0</number>
@@ -528,6 +571,9 @@ QPushButton:pressed
                 </property>
                 <item>
                  <widget class="QWidget" name="widget_13" native="true">
+                  <property name="focusPolicy">
+                   <enum>Qt::ClickFocus</enum>
+                  </property>
                   <layout class="QHBoxLayout" name="horizontalLayout_11">
                    <property name="spacing">
                     <number>2</number>
@@ -546,6 +592,15 @@ QPushButton:pressed
                    </property>
                    <item>
                     <widget class="QLabel" name="currentEntryText">
+                     <property name="sizePolicy">
+                      <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+                       <horstretch>0</horstretch>
+                       <verstretch>0</verstretch>
+                      </sizepolicy>
+                     </property>
+                     <property name="focusPolicy">
+                      <enum>Qt::ClickFocus</enum>
+                     </property>
                      <property name="text">
                       <string>Current entry: </string>
                      </property>
@@ -556,10 +611,19 @@ QPushButton:pressed
                    </item>
                    <item>
                     <widget class="QLabel" name="currentEntryValue">
+                     <property name="sizePolicy">
+                      <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+                       <horstretch>0</horstretch>
+                       <verstretch>0</verstretch>
+                      </sizepolicy>
+                     </property>
                      <property name="font">
                       <font>
                        <stylestrategy>PreferAntialias</stylestrategy>
                       </font>
+                     </property>
+                     <property name="focusPolicy">
+                      <enum>Qt::ClickFocus</enum>
                      </property>
                      <property name="text">
                       <string>-</string>
@@ -573,20 +637,10 @@ QPushButton:pressed
                  </widget>
                 </item>
                 <item>
-                 <spacer name="horizontalSpacer_8">
-                  <property name="orientation">
-                   <enum>Qt::Horizontal</enum>
-                  </property>
-                  <property name="sizeHint" stdset="0">
-                   <size>
-                    <width>40</width>
-                    <height>20</height>
-                   </size>
-                  </property>
-                 </spacer>
-                </item>
-                <item>
                  <widget class="QWidget" name="widget_12" native="true">
+                  <property name="focusPolicy">
+                   <enum>Qt::ClickFocus</enum>
+                  </property>
                   <layout class="QHBoxLayout" name="horizontalLayout_10">
                    <property name="leftMargin">
                     <number>0</number>
@@ -618,6 +672,9 @@ QPushButton:pressed
                       <font>
                        <stylestrategy>PreferAntialias</stylestrategy>
                       </font>
+                     </property>
+                     <property name="focusPolicy">
+                      <enum>Qt::ClickFocus</enum>
                      </property>
                      <property name="styleSheet">
                       <string notr="true">background-color: rgba(0, 178, 0, 156);
@@ -654,6 +711,9 @@ border-radius: 6px;</string>
                        <stylestrategy>PreferAntialias</stylestrategy>
                       </font>
                      </property>
+                     <property name="focusPolicy">
+                      <enum>Qt::ClickFocus</enum>
+                     </property>
                      <property name="styleSheet">
                       <string notr="true">background-color: rgba(178, 178, 0, 156);
 color: rgb(32, 32, 32);
@@ -689,6 +749,9 @@ border-radius: 6px;</string>
                        <stylestrategy>PreferAntialias</stylestrategy>
                       </font>
                      </property>
+                     <property name="focusPolicy">
+                      <enum>Qt::ClickFocus</enum>
+                     </property>
                      <property name="styleSheet">
                       <string notr="true">background-color: rgba(0, 0, 178, 156);
 color: rgb(216, 216, 216);
@@ -713,6 +776,9 @@ border-radius: 6px;</string>
              </item>
              <item>
               <widget class="QWidget" name="widget_6" native="true">
+               <property name="focusPolicy">
+                <enum>Qt::ClickFocus</enum>
+               </property>
                <layout class="QHBoxLayout" name="horizontalLayout_8">
                 <property name="spacing">
                  <number>2</number>
@@ -731,6 +797,9 @@ border-radius: 6px;</string>
                 </property>
                 <item>
                  <widget class="QWidget" name="widget_14" native="true">
+                  <property name="focusPolicy">
+                   <enum>Qt::ClickFocus</enum>
+                  </property>
                   <layout class="QHBoxLayout" name="horizontalLayout_13">
                    <property name="spacing">
                     <number>2</number>
@@ -749,6 +818,9 @@ border-radius: 6px;</string>
                    </property>
                    <item>
                     <widget class="QLabel" name="remainingTimeText">
+                     <property name="focusPolicy">
+                      <enum>Qt::ClickFocus</enum>
+                     </property>
                      <property name="text">
                       <string>Remaining time: </string>
                      </property>
@@ -759,6 +831,9 @@ border-radius: 6px;</string>
                    </item>
                    <item>
                     <widget class="QLabel" name="approximatelyText">
+                     <property name="focusPolicy">
+                      <enum>Qt::ClickFocus</enum>
+                     </property>
                      <property name="text">
                       <string>Approximately</string>
                      </property>
@@ -772,6 +847,9 @@ border-radius: 6px;</string>
                 </item>
                 <item>
                  <widget class="QWidget" name="widget_8" native="true">
+                  <property name="focusPolicy">
+                   <enum>Qt::ClickFocus</enum>
+                  </property>
                   <layout class="QHBoxLayout" name="horizontalLayout_12">
                    <property name="spacing">
                     <number>2</number>
@@ -790,6 +868,9 @@ border-radius: 6px;</string>
                    </property>
                    <item>
                     <widget class="QLabel" name="remainingTimeHourValue">
+                     <property name="focusPolicy">
+                      <enum>Qt::ClickFocus</enum>
+                     </property>
                      <property name="text">
                       <string>-</string>
                      </property>
@@ -800,6 +881,9 @@ border-radius: 6px;</string>
                    </item>
                    <item>
                     <widget class="QLabel" name="hourUnitText">
+                     <property name="focusPolicy">
+                      <enum>Qt::ClickFocus</enum>
+                     </property>
                      <property name="text">
                       <string>hour</string>
                      </property>
@@ -813,6 +897,9 @@ border-radius: 6px;</string>
                    </item>
                    <item>
                     <widget class="QLabel" name="remainingTimeMinValue">
+                     <property name="focusPolicy">
+                      <enum>Qt::ClickFocus</enum>
+                     </property>
                      <property name="text">
                       <string>-</string>
                      </property>
@@ -823,6 +910,9 @@ border-radius: 6px;</string>
                    </item>
                    <item>
                     <widget class="QLabel" name="minUnitText">
+                     <property name="focusPolicy">
+                      <enum>Qt::ClickFocus</enum>
+                     </property>
                      <property name="text">
                       <string>min</string>
                      </property>
@@ -836,6 +926,9 @@ border-radius: 6px;</string>
                    </item>
                    <item>
                     <widget class="QLabel" name="remainingTimeSecValue">
+                     <property name="focusPolicy">
+                      <enum>Qt::ClickFocus</enum>
+                     </property>
                      <property name="text">
                       <string>-</string>
                      </property>
@@ -846,6 +939,9 @@ border-radius: 6px;</string>
                    </item>
                    <item>
                     <widget class="QLabel" name="secUnitText">
+                     <property name="focusPolicy">
+                      <enum>Qt::ClickFocus</enum>
+                     </property>
                      <property name="text">
                       <string>sec</string>
                      </property>
@@ -878,6 +974,9 @@ border-radius: 6px;</string>
              </item>
              <item>
               <widget class="QWidget" name="widget_7" native="true">
+               <property name="focusPolicy">
+                <enum>Qt::ClickFocus</enum>
+               </property>
                <layout class="QHBoxLayout" name="horizontalLayout_9">
                 <property name="leftMargin">
                  <number>0</number>
@@ -893,6 +992,9 @@ border-radius: 6px;</string>
                 </property>
                 <item>
                  <widget class="QWidget" name="widget_15" native="true">
+                  <property name="focusPolicy">
+                   <enum>Qt::ClickFocus</enum>
+                  </property>
                   <layout class="QHBoxLayout" name="horizontalLayout_14">
                    <property name="spacing">
                     <number>2</number>
@@ -911,6 +1013,9 @@ border-radius: 6px;</string>
                    </property>
                    <item>
                     <widget class="QLabel" name="remainingEntriesText">
+                     <property name="focusPolicy">
+                      <enum>Qt::ClickFocus</enum>
+                     </property>
                      <property name="text">
                       <string>Remaining entries: </string>
                      </property>
@@ -921,6 +1026,9 @@ border-radius: 6px;</string>
                    </item>
                    <item>
                     <widget class="QLabel" name="remainingEntriesValue">
+                     <property name="focusPolicy">
+                      <enum>Qt::ClickFocus</enum>
+                     </property>
                      <property name="text">
                       <string>-</string>
                      </property>
@@ -957,6 +1065,9 @@ border-radius: 6px;</string>
       </layout>
      </widget>
      <widget class="QWidget" name="cesPage">
+      <property name="focusPolicy">
+       <enum>Qt::ClickFocus</enum>
+      </property>
       <layout class="QVBoxLayout" name="verticalLayout_10">
        <property name="spacing">
         <number>0</number>
@@ -975,6 +1086,9 @@ border-radius: 6px;</string>
        </property>
        <item>
         <widget class="QWidget" name="cesWgt" native="true">
+         <property name="focusPolicy">
+          <enum>Qt::ClickFocus</enum>
+         </property>
          <layout class="QVBoxLayout" name="verticalLayout_7">
           <property name="leftMargin">
            <number>0</number>
@@ -996,6 +1110,9 @@ border-radius: 6px;</string>
               <verstretch>0</verstretch>
              </sizepolicy>
             </property>
+            <property name="focusPolicy">
+             <enum>Qt::ClickFocus</enum>
+            </property>
             <layout class="QHBoxLayout" name="horizontalLayout_19">
              <property name="leftMargin">
               <number>0</number>
@@ -1011,6 +1128,9 @@ border-radius: 6px;</string>
              </property>
              <item>
               <widget class="QLabel" name="cesTipText">
+               <property name="focusPolicy">
+                <enum>Qt::ClickFocus</enum>
+               </property>
                <property name="text">
                 <string>The target contains - entries with the same name</string>
                </property>
@@ -1021,6 +1141,9 @@ border-radius: 6px;</string>
           </item>
           <item>
            <widget class="QWidget" name="widget_20" native="true">
+            <property name="focusPolicy">
+             <enum>Qt::ClickFocus</enum>
+            </property>
             <layout class="QVBoxLayout" name="verticalLayout_8">
              <property name="spacing">
               <number>0</number>
@@ -1053,8 +1176,6 @@ border-radius: 6px;</string>
                </property>
                <property name="font">
                 <font>
-                 <family>Segoe UI</family>
-                 <pointsize>11</pointsize>
                  <stylestrategy>PreferAntialias</stylestrategy>
                 </font>
                </property>
@@ -1087,7 +1208,7 @@ QPushButton:pressed
 }</string>
                </property>
                <property name="text">
-                <string>Replace All (R̲)</string>
+                <string>Replace All</string>
                </property>
                <property name="icon">
                 <iconset resource="filelink.qrc">
@@ -1109,6 +1230,9 @@ QPushButton:pressed
              </item>
              <item>
               <widget class="Line" name="line_2">
+               <property name="focusPolicy">
+                <enum>Qt::ClickFocus</enum>
+               </property>
                <property name="styleSheet">
                 <string notr="true">margin: 25px;
 color: rgb(204, 204, 204);</string>
@@ -1137,8 +1261,6 @@ color: rgb(204, 204, 204);</string>
                </property>
                <property name="font">
                 <font>
-                 <family>Segoe UI</family>
-                 <pointsize>11</pointsize>
                  <stylestrategy>PreferAntialias</stylestrategy>
                 </font>
                </property>
@@ -1171,7 +1293,7 @@ QPushButton:pressed
 }</string>
                </property>
                <property name="text">
-                <string>Skip All (S̲)</string>
+                <string>Skip All</string>
                </property>
                <property name="icon">
                 <iconset resource="filelink.qrc">
@@ -1190,6 +1312,9 @@ QPushButton:pressed
              </item>
              <item>
               <widget class="Line" name="line_3">
+               <property name="focusPolicy">
+                <enum>Qt::ClickFocus</enum>
+               </property>
                <property name="styleSheet">
                 <string notr="true">margin: 25px;
 color: rgb(204, 204, 204);</string>
@@ -1218,8 +1343,6 @@ color: rgb(204, 204, 204);</string>
                </property>
                <property name="font">
                 <font>
-                 <family>Segoe UI</family>
-                 <pointsize>11</pointsize>
                  <stylestrategy>PreferAntialias</stylestrategy>
                 </font>
                </property>
@@ -1255,7 +1378,7 @@ QPushButton:pressed
 }</string>
                </property>
                <property name="text">
-                <string>Keep All (K̲)</string>
+                <string>Keep All</string>
                </property>
                <property name="icon">
                 <iconset resource="filelink.qrc">
@@ -1274,6 +1397,9 @@ QPushButton:pressed
              </item>
              <item>
               <widget class="Line" name="line_4">
+               <property name="focusPolicy">
+                <enum>Qt::ClickFocus</enum>
+               </property>
                <property name="styleSheet">
                 <string notr="true">margin: 25px;
 color: rgb(204, 204, 204);</string>
@@ -1302,8 +1428,6 @@ color: rgb(204, 204, 204);</string>
                </property>
                <property name="font">
                 <font>
-                 <family>Segoe UI</family>
-                 <pointsize>11</pointsize>
                  <stylestrategy>PreferAntialias</stylestrategy>
                 </font>
                </property>
@@ -1336,7 +1460,7 @@ QPushButton:pressed
 }</string>
                </property>
                <property name="text">
-                <string>Decide All (D̲)</string>
+                <string>Decide All</string>
                </property>
                <property name="icon">
                 <iconset resource="filelink.qrc">
@@ -1365,6 +1489,9 @@ QPushButton:pressed
    </item>
    <item>
     <widget class="Line" name="line">
+     <property name="focusPolicy">
+      <enum>Qt::ClickFocus</enum>
+     </property>
      <property name="styleSheet">
       <string notr="true">color: rgb(204, 204, 204);</string>
      </property>
@@ -1381,6 +1508,9 @@ QPushButton:pressed
    </item>
    <item>
     <widget class="QWidget" name="errorWgt" native="true">
+     <property name="focusPolicy">
+      <enum>Qt::ClickFocus</enum>
+     </property>
      <property name="styleSheet">
       <string notr="true">QLabel {
 	color: #cc0000;
@@ -1422,6 +1552,9 @@ QPushButton:disabled {
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
+        <property name="focusPolicy">
+         <enum>Qt::ClickFocus</enum>
+        </property>
         <layout class="QVBoxLayout" name="verticalLayout_11">
          <property name="spacing">
           <number>2</number>
@@ -1440,6 +1573,9 @@ QPushButton:disabled {
          </property>
          <item>
           <widget class="QWidget" name="widget_19" native="true">
+           <property name="focusPolicy">
+            <enum>Qt::ClickFocus</enum>
+           </property>
            <layout class="QHBoxLayout" name="horizontalLayout_17">
             <property name="leftMargin">
              <number>0</number>
@@ -1455,6 +1591,9 @@ QPushButton:disabled {
             </property>
             <item>
              <widget class="QWidget" name="widget_18" native="true">
+              <property name="focusPolicy">
+               <enum>Qt::ClickFocus</enum>
+              </property>
               <layout class="QHBoxLayout" name="horizontalLayout_18">
                <property name="spacing">
                 <number>2</number>
@@ -1478,6 +1617,9 @@ QPushButton:disabled {
                    <stylestrategy>PreferAntialias</stylestrategy>
                   </font>
                  </property>
+                 <property name="focusPolicy">
+                  <enum>Qt::ClickFocus</enum>
+                 </property>
                  <property name="text">
                   <string>Failed entries: </string>
                  </property>
@@ -1492,6 +1634,9 @@ QPushButton:disabled {
                   <font>
                    <stylestrategy>PreferAntialias</stylestrategy>
                   </font>
+                 </property>
+                 <property name="focusPolicy">
+                  <enum>Qt::ClickFocus</enum>
                  </property>
                  <property name="text">
                   <string>0</string>
@@ -1522,6 +1667,9 @@ QPushButton:disabled {
          </item>
          <item>
           <widget class="QWidget" name="widget_16" native="true">
+           <property name="focusPolicy">
+            <enum>Qt::ClickFocus</enum>
+           </property>
            <layout class="QHBoxLayout" name="horizontalLayout_15">
             <property name="leftMargin">
              <number>0</number>
@@ -1542,6 +1690,9 @@ QPushButton:disabled {
                 <horstretch>0</horstretch>
                 <verstretch>0</verstretch>
                </sizepolicy>
+              </property>
+              <property name="focusPolicy">
+               <enum>Qt::ClickFocus</enum>
               </property>
               <layout class="QHBoxLayout" name="horizontalLayout_16">
                <property name="leftMargin">

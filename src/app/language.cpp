@@ -1,6 +1,7 @@
 #include "language.h"
 
 #include <qapplication.h>
+#include <qdir.h>
 #include <qevent.h>
 
 #include <easy_translate.hpp>
@@ -29,17 +30,18 @@ Language currentSystemLang()
 
 bool setLanguage(Language lang)
 {
+    QDir::setCurrent(QApplication::applicationDirPath());
     easytr::setLanguages(APP_LANG_LIST_FILENAME);
     if (easytr::languages().empty())
     {
-        qWarning() << "Invalid or empty Languages file";
+        qDebug() << "Invalid or empty Languages file";
         return false;
     }
 
     std::string id = languageStringId(lang).toStdString();
     if (!easytr::hasLanguage(id))
     {
-        qWarning() << "Expected language is missing";
+        qDebug() << "Expected language is missing";
         return false;
     }
 

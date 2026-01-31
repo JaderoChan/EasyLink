@@ -5,7 +5,7 @@
 #define CLSNAME "ConflictDecisionDialog"
 
 ConflictDecisionDialog::ConflictDecisionDialog(LinkTasks& conflicts, QWidget* parent)
-    : QDialog(parent), tableWgt_(conflicts)
+    : QDialog(parent), tableWgt_(conflicts, this)
 {
     ui.setupUi(this);
 

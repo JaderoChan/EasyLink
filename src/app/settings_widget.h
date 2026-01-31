@@ -1,22 +1,26 @@
 #pragma once
 
-#include <qdialog.h>
+#include <qevent.h>
+#include <qwidget.h>
 
-#include "ui_settings_dialog.h"
-#include "language.h"
+#include "ui_settings_widget.h"
 #include "settings.h"
 
-class SettingsDialog : public QDialog
+class SettingsWidget : public QWidget
 {
+    Q_OBJECT
+
 public:
-    explicit SettingsDialog(QWidget* parent = nullptr);
+    explicit SettingsWidget(const Settings& settings, QWidget* parent = nullptr);
+
+    void showAndActivate();
 
 signals:
-    void symlinkHotkeyChanged(gbhk::KeyCombination);
-    void hardlinkHotkeyChanged(gbhk::KeyCombination);
+    void settingsChanged(Settings settings);
 
 protected:
     virtual void updateText();
+    void changeEvent(QEvent* event) override;
 
     void onLanguageChanged(int index);
     void onAutoRunOnStartUpChanged(bool enable);
@@ -28,6 +32,6 @@ protected:
 private:
     void alertSameHotkey();
 
-    Ui::SettingsDialog ui;
+    Ui::SettingsWidget ui;
     Settings settings_;
 };

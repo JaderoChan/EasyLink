@@ -5,7 +5,7 @@
 #include "config.h"
 
 #define READ_KC(settings, key, defaultValue) \
-gbhk::KeyCombination(settings.value(key, "defaultValue").toString().toStdString())
+gbhk::KeyCombination(settings.value(key, defaultValue).toString().toStdString())
 
 Settings loadSettings()
 {
@@ -18,7 +18,7 @@ Settings loadSettings()
     settings.hardlinkHotkey = READ_KC(qsettings, "HardlinkHotkey", "Ctrl+H");
 
     qsettings.beginGroup("LinkConfig");
-    settings.linkConfig.keepDialogOnErrorOccurred = qsettings.value("KeepDialogOnErrorOccurred", false).toBool();
+    settings.linkConfig.keepDialogOnErrorOccurred = qsettings.value("KeepDialogOnErrorOccurred", true).toBool();
     settings.linkConfig.removeToTrash = qsettings.value("RemoveToTrash", false).toBool();
     qsettings.endGroup();
 

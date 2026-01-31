@@ -1,0 +1,183 @@
+#ifndef GLOBAL_HOTKEY_DISABLE_HOOK
+
+#include "hook_ghm_private.hpp"
+
+#include <global_hotkey/return_code.hpp>
+
+#include "../key/key_private.hpp"
+
+namespace gbhk
+{
+
+std::mutex HookGHMPrivate::mtx_;
+std::condition_variable HookGHMPrivate::cvHasEvent_;
+std::queue<Event> HookGHMPrivate::eventQueue_;
+
+HookGHMPrivate::HookGHMPrivate() = default;
+
+HookGHMPrivate::~HookGHMPrivate() { uninitialize(); }
+
+int HookGHMPrivate::doBeforeThreadRun()
+{
+    clearEventQueue();
+
+    int rc = kbdt_start();
+    if (rc != KBDT_RC_SUCCESS)
+        return rc;
+    kbdt_set_event_handler(&kbdtEventHandler);
+    return RC_SUCCESS;
+}
+
+int HookGHMPrivate::doBeforeThreadEnd()
+{
+    pushEvent({ET_EXIT});
+    int rc = kbdt_stop();
+    if (rc != KBDT_RC_SUCCESS)
+        return rc;
+    return RC_SUCCESS;
+}
+
+static bool isMetaKey(Key key)
+{
+    return key == Key_Mod_Meta || key == Key_Mod_Meta_Left || key == Key_Mod_Meta_Right;
+}
+
+static bool isCtrlKey(Key key)
+{
+    return key == Key_Mod_Ctrl || key == Key_Mod_Ctrl_Left || key == Key_Mod_Ctrl_Right;
+}
+
+static bool isAltKey(Key key)
+{
+    return key == Key_Mod_Alt || key == Key_Mod_Alt_Left || key == Key_Mod_Alt_Right;
+}
+
+static bool isShiftKey(Key key)
+{
+    return key == Key_Mod_Shift || key == Key_Mod_Shift_Left || key == Key_Mod_Shift_Right;
+}
+
+void HookGHMPrivate::work()
+{
+    setRunSuccess();
+    bool shouldExit = false;
+    KeyCombination prevKc;
+    Modifiers pressedMod = 0;
+    while (!shouldExit)
+    {
+        Event ev = takeEvent();
+        switch (ev.type)
+        {
+            case ET_EXIT:
+            {
+                shouldExit = true;
+                break;
+            }
+            case ET_KEY_PRESSED:
+            {
+                Key key = ev.data;
+                if (isMetaKey(key))
+                {
+                    pressedMod.add(META);
+                }
+                else if (isCtrlKey(key))
+                {
+                    pressedMod.add(CTRL);
+                }
+                else if (isAltKey(key))
+                {
+                    pressedMod.add(ALT);
+                }
+                else if (isShiftKey(key))
+                {
+                    pressedMod.add(SHIFT);
+                }
+                else
+                {
+                #if defined(GLOBAL_HOTKEY_WIN) && defined(GLOBAL_HOTKEY_OPTIMIZE_SYSTEM_RESERVE_HOTKEY)
+                    bool isCtrlShiftEsc = (pressedMod == (CTRL | SHIFT) && key == Key_Esc);
+                    bool isCtrlAltDel = (pressedMod == (CTRL | ALT) && key == Key_Delete);
+                    if (isCtrlShiftEsc || isCtrlAltDel)
+                    {
+                        pressedMod = 0;
+                        break;
+                    }
+                #endif
+
+                    KeyCombination currKc(pressedMod, key);
+                    tryInvoke(prevKc, currKc);
+                    prevKc = currKc;
+                }
+                break;
+            }
+            case ET_KEY_RELEASED:
+            {
+                Key key = ev.data;
+                if (isMetaKey(key))
+                    pressedMod.remove(META);
+                else if (isCtrlKey(key))
+                    pressedMod.remove(CTRL);
+                else if (isAltKey(key))
+                    pressedMod.remove(ALT);
+                else if (isShiftKey(key))
+                    pressedMod.remove(SHIFT);
+                prevKc = {};
+                break;
+            }
+            default:
+                break;
+        }
+    }
+}
+
+int HookGHMPrivate::registerHotkey(const KeyCombination& kc, bool autoRepeat)
+{ return RC_SUCCESS; }
+
+int HookGHMPrivate::unregisterHotkey(const KeyCombination& kc)
+{ return RC_SUCCESS; }
+
+void HookGHMPrivate::tryInvoke(const KeyCombination& prevKc, const KeyCombination& currKc) const
+{
+    auto pair = getPairValue(currKc);
+    auto& autoRepeat = pair.first;
+    auto& fn = pair.second;
+    bool shouldInvoke = fn && (currKc != prevKc || autoRepeat);
+    if (shouldInvoke)
+        fn();
+}
+
+Event HookGHMPrivate::takeEvent()
+{
+    std::unique_lock<std::mutex> lock(mtx_);
+    cvHasEvent_.wait(lock, []() { return !eventQueue_.empty(); });
+    Event ev = eventQueue_.front();
+    eventQueue_.pop();
+    return ev;
+}
+
+void HookGHMPrivate::pushEvent(const Event& event)
+{
+    {
+        std::lock_guard<std::mutex> lock(mtx_);
+        eventQueue_.push(event);
+    }
+    cvHasEvent_.notify_one();
+}
+
+void HookGHMPrivate::clearEventQueue()
+{
+    std::lock_guard<std::mutex> lock(mtx_);
+    while (!eventQueue_.empty())
+        eventQueue_.pop();
+}
+
+void HookGHMPrivate::kbdtEventHandler(keyboard_event* event)
+{
+    auto key = keyFromNativeKey(event->native_key);
+    auto et = (event->type == KBDET_PRESSED ? ET_KEY_PRESSED : ET_KEY_RELEASED);
+    pushEvent({et, key});
+}
+
+} // namespace gbhk
+
+#endif // !GLOBAL_HOTKEY_DISABLE_HOOK

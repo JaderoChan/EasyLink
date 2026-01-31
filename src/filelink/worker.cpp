@@ -217,6 +217,11 @@ bool FileLinkWorker::createLink(LinkType linkType, QFileInfo& source, QFileInfo&
                 case CES_NONE:
                     return false;
                 case CES_REPLACE:
+                    if (source.absoluteFilePath() == target.absoluteFilePath())
+                    {
+                        THROW_RTERR("The replaced file and the replacement file are the same entity.");
+                    }
+
                     if (removeToTrash_)
                     {
                         if (!QFile::moveToTrash(target.absoluteFilePath()))
@@ -227,6 +232,7 @@ bool FileLinkWorker::createLink(LinkType linkType, QFileInfo& source, QFileInfo&
                         if (!QFile::remove(target.absoluteFilePath()))
                             THROW_RTERR("Failed to remove the target file.");
                     }
+
                     createLink(linkType, source, target);
                     break;
                 case CES_SKIP:
@@ -285,7 +291,7 @@ LinkTasks FileLinkWorker::processTasks()
         {
             stats_.processedEntries++;
             stats_.failedEntries++;
-            emit errorOccurred(task.linkType, currentEntryPair_, e.what());
+            emit errorOccurred(task.linkType, currentEntryPair_, QString::fromLocal8Bit(e.what()));
             tryUpdateProgress();
         }
     }

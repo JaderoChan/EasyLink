@@ -5,7 +5,7 @@
 #include <easy_translate.hpp>
 
 SystemTrayIcon::SystemTrayIcon(QObject* parent)
-    : QSystemTrayIcon(parent), menu_(this)
+    : QSystemTrayIcon(parent)
 {
     setIcon(QIcon(":/icons/app.ico"));
 
@@ -25,21 +25,9 @@ SystemTrayIcon::SystemTrayIcon(QObject* parent)
 
 void SystemTrayIcon::updateText()
 {
-    setToolTip(EASYTR("SystemTrayIcon.ToolTip"));
     settingsAction_.setText(EASYTR("SystemTrayIcon.Action.Settings"));
     aboutAction_.setText(EASYTR("SystemTrayIcon.Action.About"));
     exitAction_.setText(EASYTR("SystemTrayIcon.Action.Exit"));
-}
-
-bool SystemTrayIcon::eventFilter(QObject* obj, QEvent* event)
-{
-    Q_UNUSED(obj);
-    if (event->type() == QEvent::LanguageChange)
-    {
-        updateText();
-        return true;
-    }
-    return QSystemTrayIcon::eventFilter(obj, event);
 }
 
 void SystemTrayIcon::onActivated(QSystemTrayIcon::ActivationReason reason)

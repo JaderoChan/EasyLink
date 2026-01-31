@@ -1,0 +1,96 @@
+#include "hotkey_manager.h"
+
+#include <qapplication.h>
+#include <qclipboard.h>
+#include <qmimedata.h>
+
+#include "filelink/controller.h"
+#include "shell/shell_utility.h"
+
+HotkeyManager::HotkeyManager(QObject* parent)
+    : QObject(parent),
+    ghm_(gbhk::HookGlobalHotkeyManager::getInstance())
+{
+    int rc = ghm_.initialize();
+    if (rc != gbhk::RC_SUCCESS)
+        qDebug() << "Failed to initialize the Global Hotkey Manager";
+    connect(this, &HotkeyManager::shouldLinks, this, &HotkeyManager::links);
+}
+
+HotkeyManager::~HotkeyManager()
+{
+    int rc = ghm_.uninitialize();
+    if (rc != gbhk::RC_SUCCESS)
+        qDebug() << "Failed to uninitialize the Global Hotkey Manager";
+}
+
+void HotkeyManager::setSettings(const Settings& settings)
+{
+    auto hotkeyHandler = [=](LinkType linkType)
+    {
+        auto oldHotkey = (linkType == LT_SYMLINK ? settings_.symlinkHotkey : settings_.hardlinkHotkey);
+        auto newHotkey = (linkType == LT_SYMLINK ? settings.symlinkHotkey : settings.hardlinkHotkey);
+
+        if (ghm_.has(oldHotkey))
+        {
+            if (newHotkey.isValid())
+            {
+                int rc = ghm_.replace(oldHotkey, newHotkey);
+                if (rc != gbhk::RC_SUCCESS)
+                    qDebug() << QString("Failed to replace hotkey from %1 to %2, error message: %3").arg(
+                        oldHotkey.toString().c_str(),
+                        newHotkey.toString().c_str(),
+                        gbhk::getReturnCodeMessage(rc).c_str());
+            }
+            else
+            {
+                int rc = ghm_.remove(oldHotkey);
+                if (rc != gbhk::RC_SUCCESS)
+                    qDebug() << QString("Failed to remove hotkey %1, error message: %3").arg(
+                        oldHotkey.toString().c_str(),
+                        gbhk::getReturnCodeMessage(rc).c_str());
+            }
+        }
+        else
+        {
+            if (newHotkey.isValid())
+            {
+                int rc = ghm_.add(newHotkey, [=]() { emit shouldLinks(linkType); });
+                if (rc != gbhk::RC_SUCCESS)
+                    qDebug() << QString("Failed to add hotkey %1, error message: %3").arg(
+                        newHotkey.toString().c_str(),
+                        gbhk::getReturnCodeMessage(rc).c_str());
+            }
+        }
+    };
+
+    if (settings.symlinkHotkey != settings_.symlinkHotkey)
+        hotkeyHandler(LT_SYMLINK);
+    if (settings.hardlinkHotkey != settings_.hardlinkHotkey)
+        hotkeyHandler(LT_HARDLINK);
+
+    settings_ = settings;
+}
+
+void HotkeyManager::links(LinkType linkType)
+{
+    auto data = qApp->clipboard()->mimeData();
+    if (data->hasUrls())
+    {
+        QStringList sourcePaths;
+        for (const auto& url : data->urls())
+            sourcePaths.append(url.toLocalFile());
+        QString targetDir;
+        try
+        {
+            targetDir = getFocusedExplorerWindowDirectory();
+        }
+        catch (std::exception& e)
+        {
+            qDebug() << "Failed to getFocusedExplorerWindowDirectory()";
+            return;
+        }
+        auto controller = new FileLinkController(linkType, sourcePaths, targetDir, settings_.linkConfig, this);
+        controller->start();
+    }
+}

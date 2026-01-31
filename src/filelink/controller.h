@@ -4,28 +4,28 @@
 #include <qthread.h>
 #include <qobject.h>
 
+#include "types.h"
+#include "link_config.h"
 #include "worker.h"
 #include "progress_widget.h"
-#include "link_config.h"
-#include "types.h"
 
-class FileLinkManager : public QObject
+class FileLinkController : public QObject
 {
     Q_OBJECT
 
 public:
-    explicit FileLinkManager(
+    FileLinkController(
         LinkType linkType,
         const QStringList& sourcePaths,
         const QString& targetDir,
         const LinkConfig& config = LinkConfig(),
         QObject* parent = nullptr);
-    ~FileLinkManager();
+    ~FileLinkController();
 
     void start();
+    void stop();
 
 signals:
-    void cancel();
     void operate();
 
 private:
